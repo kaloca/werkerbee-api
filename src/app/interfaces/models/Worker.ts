@@ -3,7 +3,7 @@ import { Document } from 'mongoose'
 import { Address } from '../Address'
 import { BankAccount } from '../BankAccount'
 
-interface Experience {
+interface Experience extends Document {
 	company: string
 	jobType: string
 	startDate: Date
