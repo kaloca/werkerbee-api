@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
-import controllers from '../../controllers'
-import { requireAuth } from '../../middlewares/AuthMiddleware'
+import controllers from '@/app/controllers'
+import { requireAuth } from '@/app/middlewares/AuthMiddleware'
 
 const EditWorkerRouter = Router()
 

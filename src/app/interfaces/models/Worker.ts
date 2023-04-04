@@ -10,7 +10,7 @@ interface Experience extends Document {
 	endDate: Date
 }
 
-export interface Worker extends Document {
+export interface IWorker extends Document {
 	name: string
 	phoneNumber: string
 	email: string

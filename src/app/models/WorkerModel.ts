@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-import { Worker } from '../interfaces/models/Worker'
+import { IWorker } from '../interfaces/models/Worker'
 import addressSchema from './schemas/addressSchema'
 import bankAccountSchema from './schemas/bankAccountSchema'
 
@@ -23,8 +23,9 @@ const workerSchema: Schema = new Schema({
 	rating: { type: Number, default: null },
 	jobTypes: { type: [String], required: true },
 	experiences: { type: [experienceSchema], required: false },
+	pastJobs: { type: [String], required: false },
 	hashedPassword: { type: String, required: true },
 	// documents: { type: Buffer, required: true },
 })
 
-export default mongoose.model<Worker>('Worker', workerSchema)
+export default mongoose.model<IWorker>('Worker', workerSchema)

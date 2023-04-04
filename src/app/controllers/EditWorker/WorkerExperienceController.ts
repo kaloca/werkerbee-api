@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
-import WorkerModel from '../../models/WorkerModel'
-import { Worker } from '../../interfaces/models/Worker'
+import WorkerModel from '@/app/models/WorkerModel'
+import { IWorker } from '@/app/interfaces/models/Worker'
 
 export const WorkerAddExperienceController = async (
 	req: Request,
@@ -11,7 +11,7 @@ export const WorkerAddExperienceController = async (
 		const workerId = req.params.workerId
 		const experience = req.body
 
-		const worker: Worker | null = await WorkerModel.findById(workerId)
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -40,7 +40,7 @@ export const WorkerDeleteExperienceController = async (
 		const workerId = req.params.workerId
 		const experienceId = req.params.experienceId
 
-		const worker: Worker | null = await WorkerModel.findById(workerId)
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })

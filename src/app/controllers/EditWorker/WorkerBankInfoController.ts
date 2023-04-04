@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
-import WorkerModel from '../../models/WorkerModel'
-import { Worker } from '../../interfaces/models/Worker'
+import WorkerModel from '@/app/models/WorkerModel'
+import { IWorker } from '@/app/interfaces/models/Worker'
 
 export const updateBankInfo = async (req: Request, res: Response) => {
 	try {
 		const workerId = req.params.workerId
 		const bankInfo = req.body
 
-		const worker: Worker | null = await WorkerModel.findById(workerId)
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })

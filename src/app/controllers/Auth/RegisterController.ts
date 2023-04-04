@@ -1,8 +1,26 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import WorkerModel from '../../models/WorkerModel'
 
-const RegisterController = async (req: Request, res: Response) => {
+import WorkerModel from '@/app/models/WorkerModel'
+import CompanyModel from '@/app/models/CompanyModel'
+
+const checkExistingEmail = async (
+	email: string,
+	res: Response
+): Promise<boolean> => {
+	const worker = await WorkerModel.findOne({ email })
+	const company = await CompanyModel.findOne({ email })
+
+	if (worker || company) {
+		res
+			.status(400)
+			.json({ message: 'an account with this email already exists' })
+		return true
+	}
+	return false
+}
+
+export const RegisterWorkerController = async (req: Request, res: Response) => {
 	try {
 		const {
 			name,
@@ -14,6 +32,8 @@ const RegisterController = async (req: Request, res: Response) => {
 			jobTypes,
 			password,
 		} = req.body
+
+		if (await checkExistingEmail(email, res)) return
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -30,11 +50,40 @@ const RegisterController = async (req: Request, res: Response) => {
 
 		await newWorker.save()
 
-		return res.status(200).send('New worker created successfuly')
+		return res.status(200).json({ message: 'New worker created successfuly' })
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)
 	}
 }
 
-export default RegisterController
+export const RegisterCompanyController = async (
+	req: Request,
+	res: Response
+) => {
+	try {
+		const { name, email, location, type, password, jobTypes, address } =
+			req.body
+
+		if (await checkExistingEmail(email, res)) return
+
+		const hashedPassword = await bcrypt.hash(password, 10)
+
+		const newCompany = new CompanyModel({
+			name,
+			email,
+			location,
+			type,
+			address,
+			jobTypes,
+			hashedPassword,
+		})
+
+		await newCompany.save()
+
+		return res.status(200).json({ message: 'New company created successfuly' })
+	} catch (error) {
+		console.log(error)
+		return res.sendStatus(400)
+	}
+}
