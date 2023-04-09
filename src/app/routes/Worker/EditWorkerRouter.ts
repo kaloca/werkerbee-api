@@ -8,22 +8,22 @@ const EditWorkerRouter = Router()
 EditWorkerRouter.put(
 	'/worker/:workerId/bank-info',
 	requireAuth,
-	controllers.updateBankInfo
+	controllers.WorkerEditController.updateBankInfo
 )
 EditWorkerRouter.put(
 	'/worker/:workerId/experience',
 	requireAuth,
-	controllers.WorkerAddExperienceController
+	controllers.WorkerEditController.addExperience
 )
 EditWorkerRouter.delete(
 	'/worker=:workerId&experience=:experienceId/delete',
 	requireAuth,
-	controllers.WorkerDeleteExperienceController
+	controllers.WorkerEditController.deleteExperience
 )
 EditWorkerRouter.put(
 	'/worker/:workerId/address',
 	requireAuth,
-	controllers.WorkerAddressController
+	controllers.WorkerEditController.addAddress
 )
 
 //EditWorkerRouter.post('/editworker/', requireAuth)

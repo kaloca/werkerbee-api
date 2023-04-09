@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import JobTypeModel from '@/app/models/JobTypeModel'
 import { IJobType } from '@/app/interfaces/models/JobType'
 
-export const addJobType = async (req: Request, res: Response) => {
+const addJobType = async (req: Request, res: Response) => {
 	try {
 		const jobType = new JobTypeModel(req.body)
 		await jobType.save()
@@ -15,7 +15,7 @@ export const addJobType = async (req: Request, res: Response) => {
 	}
 }
 
-export const getJobTypes = async (_req: Request, res: Response) => {
+const getJobTypes = async (_req: Request, res: Response) => {
 	try {
 		const jobTypes: IJobType[] = await JobTypeModel.find()
 		res.status(200).json({ jobTypes })
@@ -25,3 +25,7 @@ export const getJobTypes = async (_req: Request, res: Response) => {
 			.json({ message: 'An error occurred while fetching job types.', error })
 	}
 }
+
+const JobTypeController = { addJobType, getJobTypes }
+
+export default JobTypeController

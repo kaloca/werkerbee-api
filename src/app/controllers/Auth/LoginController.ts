@@ -9,7 +9,7 @@ import { AUTH_SECRET } from '@/app/util/secrets'
 import { ICompany } from '@/app/interfaces/models/Company'
 import CompanyModel from '@/app/models/CompanyModel'
 
-const LoginController = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
 	try {
 		const { email, password } = req.body
 
@@ -41,5 +41,7 @@ const LoginController = async (req: Request, res: Response) => {
 		return res.sendStatus(400)
 	}
 }
+
+const LoginController = { login }
 
 export default LoginController

@@ -1,12 +1,9 @@
+import controllers from '@/app/controllers'
 import { Router } from 'express'
-import {
-	addJobType,
-	getJobTypes,
-} from '@/app/controllers/Jobs/JobTypeController'
 
 const JobTypeRouter = Router()
 
-JobTypeRouter.post('/job-types', addJobType)
-JobTypeRouter.get('/job-types', getJobTypes)
+JobTypeRouter.post('/job-types', controllers.JobTypeController.addJobType)
+JobTypeRouter.get('/job-types', controllers.JobTypeController.getJobTypes)
 
 export default JobTypeRouter

@@ -8,11 +8,11 @@ const CompanyRouter = Router()
 CompanyRouter.get(
 	'/company/:companyId/profile',
 	requireAuth,
-	controllers.GetCompanyProfileController
+	controllers.CompanyProfileController.getCompanyProfile
 )
 CompanyRouter.get(
 	'/company/:companyId',
-	controllers.GetCompanyPublicProfileController
+	controllers.CompanyProfileController.getCompanyPublicProfile
 )
 
 export default CompanyRouter

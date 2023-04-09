@@ -20,7 +20,7 @@ const checkExistingEmail = async (
 	return false
 }
 
-export const RegisterWorkerController = async (req: Request, res: Response) => {
+const registerWorker = async (req: Request, res: Response) => {
 	try {
 		const {
 			name,
@@ -57,10 +57,7 @@ export const RegisterWorkerController = async (req: Request, res: Response) => {
 	}
 }
 
-export const RegisterCompanyController = async (
-	req: Request,
-	res: Response
-) => {
+const registerCompany = async (req: Request, res: Response) => {
 	try {
 		const { name, email, location, type, password, jobTypes, address } =
 			req.body
@@ -87,3 +84,7 @@ export const RegisterCompanyController = async (
 		return res.sendStatus(400)
 	}
 }
+
+const RegisterController = { registerCompany, registerWorker }
+
+export default RegisterController

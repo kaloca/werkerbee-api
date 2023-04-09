@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import JobPostingModel from '@/app/models/JobPostingModel'
 
-export const createJobPosting = async (req: Request, res: Response) => {
+const createJobPosting = async (req: Request, res: Response) => {
 	const newJobPosting = new JobPostingModel({ ...req.body })
 
 	try {
@@ -13,7 +13,7 @@ export const createJobPosting = async (req: Request, res: Response) => {
 	}
 }
 
-export const updateJobPosting = async (req: Request, res: Response) => {
+const updateJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
 	const { companyId } = req.body
 
@@ -34,7 +34,7 @@ export const updateJobPosting = async (req: Request, res: Response) => {
 	}
 }
 
-export const deleteJobPosting = async (req: Request, res: Response) => {
+const deleteJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
 	const { companyId } = req.body
 
@@ -54,7 +54,7 @@ export const deleteJobPosting = async (req: Request, res: Response) => {
 	}
 }
 
-export const getAllJobPostings = async (req: Request, res: Response) => {
+const getAllJobPostings = async (req: Request, res: Response) => {
 	const page = parseInt(req.query.page as string) || 1
 	const limit = parseInt(req.query.limit as string) || 10
 
@@ -76,3 +76,12 @@ export const getAllJobPostings = async (req: Request, res: Response) => {
 		res.status(500).json({ error: (error as Error).message })
 	}
 }
+
+const JobPostingController = {
+	createJobPosting,
+	updateJobPosting,
+	deleteJobPosting,
+	getAllJobPostings,
+}
+
+export default JobPostingController

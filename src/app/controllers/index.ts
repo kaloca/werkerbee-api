@@ -1,39 +1,21 @@
-import {
-	RegisterWorkerController,
-	RegisterCompanyController,
-} from './Auth/RegisterController'
 import LoginController from './Auth/LoginController'
-import WorkerAddressController from './EditWorker/WorkerAddressController'
-import {
-	WorkerAddExperienceController,
-	WorkerDeleteExperienceController,
-} from './EditWorker/WorkerExperienceController'
-import { updateBankInfo } from './EditWorker/WorkerBankInfoController'
-import {
-	GetCompanyProfileController,
-	GetCompanyPublicProfileController,
-} from './Company/CompanyController'
-import {
-	createJobPosting,
-	updateJobPosting,
-	deleteJobPosting,
-	getAllJobPostings,
-} from './Jobs/JobPostingController'
+import RegisterController from './Auth/RegisterController'
+import CompanyProfileController from './Company/CompanyProfileController'
+import JobApplicationController from './Jobs/JobApplicationController'
+import JobPostingController from './Jobs/JobPostingController'
+import JobTypeController from './Jobs/JobTypeController'
+import WorkerController from './Worker/WorkerController'
+import WorkerEditController from './Worker/WorkerEditController'
 
 const controllers = {
-	RegisterWorkerController,
-	RegisterCompanyController,
 	LoginController,
-	WorkerAddressController,
-	WorkerAddExperienceController,
-	WorkerDeleteExperienceController,
-	updateBankInfo,
-	GetCompanyProfileController,
-	GetCompanyPublicProfileController,
-	createJobPosting,
-	updateJobPosting,
-	deleteJobPosting,
-	getAllJobPostings,
+	RegisterController,
+	CompanyProfileController,
+	JobApplicationController,
+	JobPostingController,
+	JobTypeController,
+	WorkerController,
+	WorkerEditController,
 }
 
 export default controllers

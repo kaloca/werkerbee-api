@@ -3,10 +3,7 @@ import { Request, Response } from 'express'
 import { ICompany } from '@/app/interfaces/models/Company'
 import CompanyModel from '@/app/models/CompanyModel'
 
-export const GetCompanyProfileController = async (
-	req: Request,
-	res: Response
-) => {
+const getCompanyProfile = async (req: Request, res: Response) => {
 	try {
 		const companyId = req.params.companyId
 
@@ -23,10 +20,7 @@ export const GetCompanyProfileController = async (
 	}
 }
 
-export const GetCompanyPublicProfileController = async (
-	req: Request,
-	res: Response
-) => {
+const getCompanyPublicProfile = async (req: Request, res: Response) => {
 	try {
 		const companyId = req.params.companyId
 
@@ -47,3 +41,10 @@ export const GetCompanyPublicProfileController = async (
 		return res.sendStatus(400)
 	}
 }
+
+const CompanyProfileController = {
+	getCompanyProfile,
+	getCompanyPublicProfile,
+}
+
+export default CompanyProfileController
