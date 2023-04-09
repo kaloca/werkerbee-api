@@ -5,7 +5,7 @@ import WorkerModel from '@/app/models/WorkerModel'
 
 const addAddress = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const workerId = req.user?.userId
 		const address = req.body
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
@@ -26,7 +26,7 @@ const addAddress = async (req: Request, res: Response) => {
 
 const updateBankInfo = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const workerId = req.user?.userId
 		const bankInfo = req.body
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
@@ -49,7 +49,7 @@ const updateBankInfo = async (req: Request, res: Response) => {
 
 const addExperience = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const workerId = req.user?.userId
 		const experience = req.body
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
@@ -75,7 +75,7 @@ const addExperience = async (req: Request, res: Response) => {
 
 const deleteExperience = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const workerId = req.user?.userId
 		const experienceId = req.params.experienceId
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
@@ -104,11 +104,47 @@ const deleteExperience = async (req: Request, res: Response) => {
 	}
 }
 
+export const updateProfile = async (req: Request, res: Response) => {
+	try {
+		const workerId = req.user?.userId
+
+		const allowedFields = ['bio']
+
+		const updateData: any = {}
+
+		allowedFields.forEach((field) => {
+			if (req.body[field] !== undefined) {
+				updateData[field] = req.body[field]
+			}
+		})
+
+		if (Object.keys(updateData).length === 0) {
+			return res.status(400).json({ message: 'No valid fields to update.' })
+		}
+
+		const updatedWorker = await WorkerModel.findOneAndUpdate(
+			{ _id: workerId },
+			{ $set: updateData },
+			{ new: true }
+		)
+
+		res
+			.status(200)
+			.json({ message: 'Profile updated successfully.', updatedWorker })
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while updating the worker profile.',
+			error,
+		})
+	}
+}
+
 const WorkerEditController = {
 	addAddress,
 	updateBankInfo,
 	addExperience,
 	deleteExperience,
+	updateProfile,
 }
 
 export default WorkerEditController

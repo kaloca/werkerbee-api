@@ -1,7 +1,8 @@
-import { Document } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 
 import { Address } from '../Address'
 import { BankAccount } from '../BankAccount'
+import { IJobApplication } from './JobApplication'
 
 interface Experience extends Document {
 	company: string
@@ -12,6 +13,7 @@ interface Experience extends Document {
 
 export interface IWorker extends Document {
 	name: string
+	bio: string
 	phoneNumber: string
 	email: string
 	location: string
@@ -22,5 +24,8 @@ export interface IWorker extends Document {
 	rating: number
 	jobTypes: string[]
 	experiences?: Experience[]
+	pastJobs?: Schema.Types.ObjectId[]
+	currentApplications?: IJobApplication[]
+	currentJobs?: Schema.Types.ObjectId[]
 	hashedPassword: string
 }

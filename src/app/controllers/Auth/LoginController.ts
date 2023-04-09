@@ -11,6 +11,7 @@ import CompanyModel from '@/app/models/CompanyModel'
 
 const login = async (req: Request, res: Response) => {
 	try {
+		console.log(req.body)
 		const { email, password } = req.body
 
 		const worker: IWorker | null = await WorkerModel.findOne({ email }).exec()

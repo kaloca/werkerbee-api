@@ -13,17 +13,30 @@ const experienceSchema: Schema = new Schema({
 
 const workerSchema: Schema = new Schema({
 	name: { type: String, required: true },
+	bio: { type: String, required: false },
 	phoneNumber: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	location: { type: String, required: true },
 	billingAddress: { type: addressSchema, required: false },
 	bankInfo: { type: bankAccountSchema, required: false },
-	ssn: { type: String, required: true },
+	ssn: { type: String, required: true, unique: true },
 	birthday: { type: Date, required: true },
 	rating: { type: Number, default: null },
 	jobTypes: { type: [String], required: true },
 	experiences: { type: [experienceSchema], required: false },
-	pastJobs: { type: [Schema.Types.ObjectId], ref: 'Job', required: false },
+	pastJobs: [{ type: Schema.Types.ObjectId, ref: 'Job', required: false }],
+	currentApplications: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'JobApplication',
+		},
+	],
+	currentJobs: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: 'Job',
+		},
+	],
 	hashedPassword: { type: String, required: true },
 	// documents: { type: Buffer, required: true },
 })

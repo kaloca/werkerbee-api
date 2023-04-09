@@ -5,7 +5,7 @@ import WorkerModel from '@/app/models/WorkerModel'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const workerId = req.user?.userId
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
 

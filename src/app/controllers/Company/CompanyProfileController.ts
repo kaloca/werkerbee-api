@@ -5,8 +5,8 @@ import CompanyModel from '@/app/models/CompanyModel'
 
 const getCompanyProfile = async (req: Request, res: Response) => {
 	try {
-		const companyId = req.params.companyId
-
+		const companyId = req.user?.userId
+		console.log('hey')
 		const company: ICompany | null = await CompanyModel.findById(companyId)
 
 		if (!company) {
@@ -42,9 +42,45 @@ const getCompanyPublicProfile = async (req: Request, res: Response) => {
 	}
 }
 
+export const editCompanyProfile = async (req: Request, res: Response) => {
+	try {
+		const companyId = req.user?.userId
+
+		const allowedFields = ['name', 'description']
+
+		const updateData: any = {}
+
+		allowedFields.forEach((field) => {
+			if (req.body[field] !== undefined) {
+				updateData[field] = req.body[field]
+			}
+		})
+
+		if (Object.keys(updateData).length === 0) {
+			return res.status(400).json({ message: 'No valid fields to update.' })
+		}
+
+		const updatedCompany = await CompanyModel.findOneAndUpdate(
+			{ _id: companyId },
+			{ $set: updateData },
+			{ new: true }
+		)
+
+		res
+			.status(200)
+			.json({ message: 'Profile updated successfully.', updatedCompany })
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while updating the company profile.',
+			error,
+		})
+	}
+}
+
 const CompanyProfileController = {
 	getCompanyProfile,
 	getCompanyPublicProfile,
+	editCompanyProfile,
 }
 
 export default CompanyProfileController
