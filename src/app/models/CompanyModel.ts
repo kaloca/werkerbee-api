@@ -10,7 +10,7 @@ const jobTypes: Schema = new Schema({
 	rating: { type: Number, required: false },
 })
 
-const CompanyModel = new Schema(
+const CompanySchema = new Schema(
 	{
 		name: {
 			type: String,
@@ -39,7 +39,8 @@ const CompanyModel = new Schema(
 			required: true,
 		},
 		currentPostings: {
-			type: [String],
+			type: [Schema.Types.ObjectId],
+			ref: 'JobPosting',
 			required: false,
 		},
 		pastJobs: {
@@ -63,4 +64,4 @@ const CompanyModel = new Schema(
 		timestamps: true,
 	}
 )
-export default mongoose.model<ICompany>('Company', CompanyModel)
+export default mongoose.model<ICompany>('Company', CompanySchema)

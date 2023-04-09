@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 
 import { IJob } from '../interfaces/models/Job'
 
-const JobModel = new Schema(
+const JobSchema = new Schema(
 	{
 		name: {
 			type: String,
@@ -13,11 +13,13 @@ const JobModel = new Schema(
 			required: true,
 		},
 		workerId: {
-			type: String,
+			type: Schema.Types.ObjectId,
+			ref: 'Worker',
 			required: true,
 		},
 		companyId: {
-			type: String,
+			type: Schema.Types.ObjectId,
+			ref: 'Company',
 			required: true,
 		},
 		status: {
@@ -52,4 +54,4 @@ const JobModel = new Schema(
 		timestamps: true,
 	}
 )
-export default mongoose.model<IJob>('JobPosting', JobModel)
+export default mongoose.model<IJob>('Job', JobSchema)

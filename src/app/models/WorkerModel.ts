@@ -23,7 +23,7 @@ const workerSchema: Schema = new Schema({
 	rating: { type: Number, default: null },
 	jobTypes: { type: [String], required: true },
 	experiences: { type: [experienceSchema], required: false },
-	pastJobs: { type: [String], required: false },
+	pastJobs: { type: [Schema.Types.ObjectId], ref: 'Job', required: false },
 	hashedPassword: { type: String, required: true },
 	// documents: { type: Buffer, required: true },
 })

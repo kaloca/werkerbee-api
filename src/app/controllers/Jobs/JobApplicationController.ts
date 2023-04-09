@@ -5,16 +5,10 @@ import { IWorker } from '@/app/interfaces/models/Worker'
 import JobPostingModel from '@/app/models/JobPostingModel'
 import WorkerModel from '@/app/models/WorkerModel'
 
-interface ApplyForJobRequest extends Request {
-	user: {
-		id: string
-	}
-}
-
-const applyForJob = async (req: ApplyForJobRequest, res: Response) => {
+const applyForJob = async (req: Request, res: Response) => {
 	try {
-		const jobId = req.params.jobId
-		const workerId = req.user.id
+		const jobId = req.params.id
+		const workerId = req.user?.userId || 'id'
 
 		const jobPosting: IJobPosting | null = await JobPostingModel.findById(jobId)
 		if (!jobPosting) {
