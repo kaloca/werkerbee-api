@@ -3,7 +3,10 @@ import { Request, Response } from 'express'
 import JobPostingModel from '@/app/models/JobPostingModel'
 
 const createJobPosting = async (req: Request, res: Response) => {
-	const newJobPosting = new JobPostingModel({ ...req.body })
+	const newJobPosting = new JobPostingModel({
+		...req.body,
+		companyId: req.user?.userId,
+	})
 
 	try {
 		await newJobPosting.save()
@@ -15,7 +18,7 @@ const createJobPosting = async (req: Request, res: Response) => {
 
 const updateJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
-	const { companyId } = req.body
+	const companyId = req.user?.userId
 
 	try {
 		const updatedJobPosting = await JobPostingModel.findOneAndUpdate(
@@ -36,7 +39,7 @@ const updateJobPosting = async (req: Request, res: Response) => {
 
 const deleteJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
-	const { companyId } = req.body
+	const companyId = req.user?.userId
 
 	try {
 		const deletedJobPosting = await JobPostingModel.findOneAndDelete({
@@ -77,11 +80,39 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	}
 }
 
+const getJobApplications = async (req: Request, res: Response) => {
+	try {
+		const jobPostingId = req.params.id
+
+		const jobPosting = await JobPostingModel.findById(jobPostingId).populate(
+			'applications'
+		)
+
+		if (!jobPosting) {
+			return res.status(404).json({ message: 'Job posting not found.' })
+		}
+
+		if (String(jobPosting.companyId) !== String(req.user?.userId)) {
+			return res
+				.status(403)
+				.json({ message: 'Unauthorized to access this job posting.' })
+		}
+
+		res.status(200).json({ applications: jobPosting.applications })
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while fetching job applications.',
+			error,
+		})
+	}
+}
+
 const JobPostingController = {
 	createJobPosting,
 	updateJobPosting,
 	deleteJobPosting,
 	getAllJobPostings,
+	getJobApplications,
 }
 
 export default JobPostingController

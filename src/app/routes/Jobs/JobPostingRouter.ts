@@ -24,10 +24,21 @@ JobPostingRouter.get(
 	'/job-postings',
 	controllers.JobPostingController.getAllJobPostings
 )
+JobPostingRouter.get(
+	'/job-post/:id/applications',
+	requireAuth,
+	controllers.JobPostingController.getJobApplications
+)
+
 JobPostingRouter.post(
 	'/job-post/:id/apply',
 	requireAuth,
 	controllers.JobApplicationController.applyForJob
+)
+JobPostingRouter.put(
+	'/job-application/:applicationId/status',
+	requireAuth,
+	controllers.JobApplicationController.updateStatus
 )
 
 export default JobPostingRouter

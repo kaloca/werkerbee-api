@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 
 export interface IJobPosting extends Document {
 	name: string
@@ -11,7 +11,7 @@ export interface IJobPosting extends Document {
 	time: string
 	type: string
 	payment: string
-	applicants: string[]
+	applications: Schema.Types.ObjectId[]
 	createdAt: Date
 	updatedAt: Date
 }

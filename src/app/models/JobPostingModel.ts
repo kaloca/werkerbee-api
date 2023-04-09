@@ -14,12 +14,12 @@ const JobPostingSchema = new Schema(
 		time: { type: String, required: true },
 		type: { type: String, required: true },
 		payment: { type: String, required: true },
-		applicants: {
-			type: [Schema.Types.ObjectId],
-			ref: 'Worker',
-			required: false,
-			default: [],
-		},
+		applications: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'JobApplication',
+			},
+		],
 	},
 	{
 		timestamps: true,
