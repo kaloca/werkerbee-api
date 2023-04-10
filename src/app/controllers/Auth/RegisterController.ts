@@ -31,7 +31,9 @@ const registerWorker = async (req: Request, res: Response) => {
 			ssn,
 			jobTypes,
 			password,
+			username,
 		} = req.body
+		console.log(req.body)
 
 		if (await checkExistingEmail(email, res)) return
 
@@ -46,6 +48,7 @@ const registerWorker = async (req: Request, res: Response) => {
 			ssn,
 			jobTypes,
 			hashedPassword,
+			username,
 		})
 
 		await newWorker.save()
@@ -69,8 +72,6 @@ const registerCompany = async (req: Request, res: Response) => {
 			jobTypes,
 			address,
 		} = req.body
-
-		console.log(req.body)
 
 		if (await checkExistingEmail(email, res)) return
 
@@ -97,6 +98,30 @@ const registerCompany = async (req: Request, res: Response) => {
 	}
 }
 
-const RegisterController = { registerCompany, registerWorker }
+const checkValidEmailUsername = async (req: Request, res: Response) => {
+	const { email, username } = req.body
+	try {
+		const emailExists =
+			(await WorkerModel.exists({ email })) ||
+			(await CompanyModel.exists({ email }))
+		const usernameExists =
+			(await WorkerModel.exists({ username })) ||
+			(await CompanyModel.exists({ username }))
+
+		return res.status(200).json({
+			emailExists,
+			usernameExists,
+		})
+	} catch (error) {
+		console.error(error)
+		res.status(500).json({ message: 'Error checking email and username' })
+	}
+}
+
+const RegisterController = {
+	registerCompany,
+	registerWorker,
+	checkValidEmailUsername,
+}
 
 export default RegisterController

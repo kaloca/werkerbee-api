@@ -17,5 +17,9 @@ AuthRouter.post('/login', controllers.LoginController.login)
 AuthRouter.get('/auth/test', requireAuth, (req, res) => {
 	res.status(200).json({ message: 'Access granted.' })
 })
+AuthRouter.post(
+	'/check-email-username',
+	controllers.RegisterController.checkValidEmailUsername
+)
 
 export default AuthRouter
