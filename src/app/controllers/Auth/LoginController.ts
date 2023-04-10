@@ -36,7 +36,12 @@ const login = async (req: Request, res: Response) => {
 
 		return res
 			.status(200)
-			.json({ token, type: worker ? 'worker' : 'company', id: user._id })
+			.json({
+				token,
+				type: worker ? 'worker' : 'company',
+				id: user._id,
+				username: user.username,
+			})
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)

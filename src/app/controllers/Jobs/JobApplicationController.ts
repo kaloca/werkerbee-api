@@ -38,7 +38,10 @@ const applyForJob = async (req: Request, res: Response) => {
 		// Create a new job application instance
 		const jobApplication = new JobApplicationModel({
 			workerId,
+			jobType: jobPosting.type,
+			companyName: jobPosting.companyName,
 			companyId: jobPosting.companyId,
+			jobTitle: jobPosting.name,
 			jobPostingId,
 			status: 'PENDING',
 		})

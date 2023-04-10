@@ -5,6 +5,7 @@ import { BankAccount } from '../BankAccount'
 
 export interface ICompany extends Document {
 	name: string
+	username: string
 	description: string
 	email: string
 	location: string

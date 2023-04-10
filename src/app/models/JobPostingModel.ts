@@ -7,6 +7,7 @@ const JobPostingSchema = new Schema(
 		name: { type: String, required: true },
 		description: { type: String, required: true },
 		companyId: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+		companyName: { type: String, required: true },
 		location: { type: String, required: true },
 		dressCode: { type: String, required: true },
 		requiredSkills: { type: String, required: true },

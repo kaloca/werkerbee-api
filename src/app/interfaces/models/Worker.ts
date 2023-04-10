@@ -13,6 +13,7 @@ interface Experience extends Document {
 
 export interface IWorker extends Document {
 	name: string
+	username: string
 	bio: string
 	phoneNumber: string
 	email: string

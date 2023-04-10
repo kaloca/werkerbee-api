@@ -6,12 +6,17 @@ import { requireAuth } from '@/app/middlewares/AuthMiddleware'
 const WorkerRouter = Router()
 
 WorkerRouter.get(
-	'/worker/profile',
+	'/worker/settings/profile',
 	requireAuth,
 	controllers.WorkerController.getWorkerProfile
 )
 WorkerRouter.get(
-	'/worker/:workerId',
+	'/worker/:username/applications',
+	requireAuth,
+	controllers.WorkerController.getApplications
+)
+WorkerRouter.get(
+	'/worker/:username',
 	controllers.WorkerController.getWorkerPublicProfile
 )
 

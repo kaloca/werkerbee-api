@@ -22,9 +22,9 @@ const getCompanyProfile = async (req: Request, res: Response) => {
 
 const getCompanyPublicProfile = async (req: Request, res: Response) => {
 	try {
-		const companyId = req.params.companyId
+		const username = req.params.username
 
-		const company: ICompany | null = await CompanyModel.findById(companyId)
+		const company: ICompany | null = await CompanyModel.findOne({ username })
 
 		if (!company) {
 			return res.status(404).json({ message: 'Company not found.' })

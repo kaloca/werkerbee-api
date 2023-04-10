@@ -59,8 +59,18 @@ const registerWorker = async (req: Request, res: Response) => {
 
 const registerCompany = async (req: Request, res: Response) => {
 	try {
-		const { name, email, location, type, password, jobTypes, address } =
-			req.body
+		const {
+			name,
+			email,
+			username,
+			location,
+			type,
+			password,
+			jobTypes,
+			address,
+		} = req.body
+
+		console.log(req.body)
 
 		if (await checkExistingEmail(email, res)) return
 
@@ -69,6 +79,8 @@ const registerCompany = async (req: Request, res: Response) => {
 		const newCompany = new CompanyModel({
 			name,
 			email,
+			description: 'hey',
+			username,
 			location,
 			type,
 			address,

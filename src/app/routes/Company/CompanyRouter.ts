@@ -6,12 +6,12 @@ import { requireAuth } from '@/app/middlewares/AuthMiddleware'
 const CompanyRouter = Router()
 
 CompanyRouter.get(
-	'/company/profile',
+	'/company/settings/profile',
 	requireAuth,
 	controllers.CompanyProfileController.getCompanyProfile
 )
 CompanyRouter.get(
-	'/company/:companyId',
+	'/company/:username',
 	controllers.CompanyProfileController.getCompanyPublicProfile
 )
 CompanyRouter.put(

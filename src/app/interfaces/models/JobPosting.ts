@@ -4,6 +4,7 @@ export interface IJobPosting extends Document {
 	name: string
 	description: string
 	companyId: string
+	companyName: string
 	location: string
 	dressCode: string
 	requiredSkills: string

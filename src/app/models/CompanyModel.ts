@@ -16,6 +16,11 @@ const CompanySchema = new Schema(
 			type: String,
 			required: true,
 		},
+		username: {
+			type: String,
+			required: true,
+			unique: true,
+		},
 		description: {
 			type: String,
 			required: true,

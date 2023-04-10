@@ -22,9 +22,9 @@ const getWorkerProfile = async (req: Request, res: Response) => {
 
 const getWorkerPublicProfile = async (req: Request, res: Response) => {
 	try {
-		const workerId = req.params.workerId
+		const username = req.params.username
 
-		const worker: IWorker | null = await WorkerModel.findById(workerId)
+		const worker: IWorker | null = await WorkerModel.findOne({ username })
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -41,6 +41,35 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 	}
 }
 
-const WorkerController = { getWorkerProfile, getWorkerPublicProfile }
+const getApplications = async (req: Request, res: Response) => {
+	const username = req.params.username
+	const workerId = req.user?.userId
+
+	try {
+		const worker = await WorkerModel.findById(workerId).populate(
+			'currentApplications'
+		)
+
+		console.log(worker)
+
+		if (!worker) {
+			return res.status(404).json({ message: 'Worker not found' })
+		}
+
+		if (username != worker.username) {
+			return res.status(403).json({ message: 'Unauthorized' })
+		}
+
+		res.status(200).json({ applications: worker.currentApplications })
+	} catch (error) {
+		res.status(500).json({ message: 'Server error' })
+	}
+}
+
+const WorkerController = {
+	getWorkerProfile,
+	getWorkerPublicProfile,
+	getApplications,
+}
 
 export default WorkerController
