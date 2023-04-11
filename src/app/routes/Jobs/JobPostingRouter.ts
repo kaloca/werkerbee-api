@@ -29,7 +29,10 @@ JobPostingRouter.get(
 	requireAuth,
 	controllers.JobPostingController.getJobApplications
 )
-
+JobPostingRouter.get(
+	'/job-post/:id',
+	controllers.JobPostingController.getJobPosting
+)
 JobPostingRouter.post(
 	'/job-post/:id/apply',
 	requireAuth,

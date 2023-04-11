@@ -57,6 +57,28 @@ const deleteJobPosting = async (req: Request, res: Response) => {
 	}
 }
 
+const getJobPosting = async (req: Request, res: Response) => {
+	const { id } = req.params
+
+	try {
+		const jobPosting = await JobPostingModel.findById(id).populate({
+			path: 'companyId',
+			select:
+				'-hashedPassword -__v -email -billingAddress -pastJobs -createdAt -updatedAt -username -bankInfo',
+		})
+
+		if (!jobPosting) {
+			return res.status(404).json({ error: 'Job posting not found' })
+		}
+
+		res.status(200).json({
+			jobPosting,
+		})
+	} catch (error) {
+		res.status(500).json({ error: (error as Error).message })
+	}
+}
+
 const getAllJobPostings = async (req: Request, res: Response) => {
 	const page = parseInt(req.query.page as string) || 1
 	const limit = parseInt(req.query.limit as string) || 10
@@ -113,6 +135,7 @@ const JobPostingController = {
 	deleteJobPosting,
 	getAllJobPostings,
 	getJobApplications,
+	getJobPosting,
 }
 
 export default JobPostingController
