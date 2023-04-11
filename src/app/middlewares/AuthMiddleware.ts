@@ -8,7 +8,6 @@ export const requireAuth = (
 	res: Response,
 	next: NextFunction
 ) => {
-	console.log('first')
 	const authHeader = req.headers.authorization
 
 	if (!authHeader) {

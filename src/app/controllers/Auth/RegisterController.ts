@@ -32,6 +32,7 @@ const registerWorker = async (req: Request, res: Response) => {
 			jobTypes,
 			password,
 			username,
+			address,
 		} = req.body
 		console.log(req.body)
 
@@ -49,6 +50,7 @@ const registerWorker = async (req: Request, res: Response) => {
 			jobTypes,
 			hashedPassword,
 			username,
+			address,
 		})
 
 		await newWorker.save()

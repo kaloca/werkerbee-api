@@ -30,11 +30,11 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
-		const { name, location, rating, jobTypes, experiences } = worker
+		const { name, location, rating, jobTypes, experiences, address } = worker
 
 		return res
 			.status(200)
-			.json({ name, location, rating, jobTypes, experiences })
+			.json({ name, location, rating, jobTypes, experiences, address })
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)

@@ -22,6 +22,7 @@ const workerSchema: Schema = new Schema({
 	phoneNumber: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	location: { type: String, required: true },
+	address: { type: addressSchema, required: true },
 	billingAddress: { type: addressSchema, required: false },
 	bankInfo: { type: bankAccountSchema, required: false },
 	ssn: { type: String, required: true, unique: true },

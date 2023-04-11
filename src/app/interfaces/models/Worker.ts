@@ -18,6 +18,7 @@ export interface IWorker extends Document {
 	phoneNumber: string
 	email: string
 	location: string
+	address: Address
 	billingAddress?: Address
 	bankInfo?: BankAccount
 	ssn: string

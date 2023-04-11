@@ -32,16 +32,23 @@ const login = async (req: Request, res: Response) => {
 
 		const base64AuthSecret = AUTH_SECRET as string
 		const authSecret = Buffer.from(base64AuthSecret, 'base64').toString('utf8')
-		const token = await jwt.sign({ userId: user._id }, authSecret)
+		const token = await jwt.sign({ userId: user._id }, authSecret, {
+			expiresIn: '7d',
+		})
 
-		return res
-			.status(200)
-			.json({
-				token,
-				type: worker ? 'worker' : 'company',
-				id: user._id,
-				username: user.username,
-			})
+		res.cookie('auth', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV !== 'development',
+			sameSite: 'strict',
+			maxAge: 7 * 24 * 3600 * 1000, // 1 week
+		})
+
+		return res.status(200).json({
+			message: 'Logged in successfully',
+			type: worker ? 'worker' : 'company',
+			id: user._id,
+			username: user.username,
+		})
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)
