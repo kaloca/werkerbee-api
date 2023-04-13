@@ -12,6 +12,6 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src/**/*", "types"],
+	"include": ["src/**/*", "types", "swagger.ts"],
 	"exclude": ["node_modules"]
 }
