@@ -1,18 +1,30 @@
 import { Request, Response } from 'express'
 
 import JobPostingModel from '@/app/models/JobPostingModel'
+import CompanyModel from '@/app/models/CompanyModel'
+import { ICompany } from '@/app/interfaces/models/Company'
 
 const createJobPosting = async (req: Request, res: Response) => {
+	const company: ICompany | null = await CompanyModel.findById(req.user?.userId)
+
+	if (!company) {
+		return res
+			.status(401)
+			.json({ message: 'Only authenticated companies can create job postings' })
+	}
+
 	const newJobPosting = new JobPostingModel({
 		...req.body,
-		companyId: req.user?.userId,
+		companyId: company._id,
+		companyName: company.name,
+		location: company.location,
 	})
 
 	try {
 		await newJobPosting.save()
-		res.status(201).json(newJobPosting)
+		res.status(201).json({ newJobPosting })
 	} catch (error) {
-		res.status(400).json({ error: (error as Error).message })
+		res.status(400).json({ message: (error as Error).message })
 	}
 }
 

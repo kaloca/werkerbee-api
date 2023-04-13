@@ -18,7 +18,8 @@ const addJobType = async (req: Request, res: Response) => {
 const getJobTypes = async (_req: Request, res: Response) => {
 	try {
 		const jobTypes: IJobType[] = await JobTypeModel.find()
-		res.status(200).json({ jobTypes })
+		const jobTypesArray = jobTypes.map((jobType) => jobType.type)
+		res.status(200).json({ types: jobTypesArray })
 	} catch (error) {
 		res
 			.status(500)
