@@ -19,5 +19,10 @@ WorkerRouter.get(
 	'/worker/:username',
 	controllers.WorkerController.getWorkerPublicProfile
 )
+WorkerRouter.get(
+	'/worker/:username/jobs',
+	requireAuth,
+	controllers.WorkerController.getJobs
+)
 
 export default WorkerRouter
