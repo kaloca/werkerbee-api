@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 
 import { IWorker } from '@/app/interfaces/models/Worker'
 import WorkerModel from '@/app/models/WorkerModel'
+import JobModel from '@/app/models/JobModel'
+import { IJob } from '@/app/interfaces/models/Job'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -66,10 +68,40 @@ const getApplications = async (req: Request, res: Response) => {
 	}
 }
 
+const getJobs = async (req: Request, res: Response) => {
+	const username = req.params.username
+	const workerId = req.user?.userId
+
+	try {
+		const worker: IWorker | null = await WorkerModel.findOne({ username })
+
+		if (!worker) {
+			return res.status(404).json({ message: 'Worker not found' })
+		}
+
+		if (workerId != worker.id) {
+			return res.status(401).json({ message: 'Unauthorized' })
+		}
+
+		const jobs: IJob[] = await JobModel.find({ workerId }).populate(
+			'jobPostingId'
+		)
+
+		if (!jobs) {
+			return res.status(404).json({ message: "Worker doesn't have any jobs" })
+		}
+
+		res.status(200).json(jobs)
+	} catch (error) {
+		res.status(500).json({ message: 'Server error' })
+	}
+}
+
 const WorkerController = {
 	getWorkerProfile,
 	getWorkerPublicProfile,
 	getApplications,
+	getJobs,
 }
 
 export default WorkerController

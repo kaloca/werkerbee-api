@@ -43,5 +43,10 @@ JobPostingRouter.put(
 	requireAuth,
 	controllers.JobApplicationController.updateStatus
 )
+JobPostingRouter.post(
+	'/job-application/:applicationId/accept',
+	requireAuth,
+	controllers.JobApplicationController.acceptApplication
+)
 
 export default JobPostingRouter

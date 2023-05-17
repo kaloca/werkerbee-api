@@ -2,12 +2,12 @@ import { Document } from 'mongoose'
 
 export interface IJob extends Document {
 	name: string
-	phoneNumber: string
-	email: string
-	location: string
-	ssn: string
-	birthday: Date
-	rating: number
+	rating?: number
+	workerId: string
+	companyId: string
+	jobPostingId: string
+	status: 'PENDING' | 'COMPLETE' | 'CANCELED'
+	time: {}
 	createdAt: Date
 	updatedAt: Date
 }
