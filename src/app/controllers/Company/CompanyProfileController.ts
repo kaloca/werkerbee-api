@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 
 import { ICompany } from '@/app/interfaces/models/Company'
+import { IJobPosting } from '@/app/interfaces/models/JobPosting'
+
 import CompanyModel from '@/app/models/CompanyModel'
+import JobPostingModel from '@/app/models/JobPostingModel'
 
 const getCompanyProfile = async (req: Request, res: Response) => {
 	try {
@@ -77,10 +80,40 @@ export const editCompanyProfile = async (req: Request, res: Response) => {
 	}
 }
 
+const getCompanyJobPosts = async (req: Request, res: Response) => {
+	try {
+		const companyUsername = req.params.username
+
+		const company: ICompany | null = await CompanyModel.findOne({
+			username: companyUsername,
+		})
+
+		if (!company) {
+			return res.status(404).json({ message: 'Company not found.' })
+		}
+
+		const companyId = company.id
+
+		const jobPostings: IJobPosting[] | null = await JobPostingModel.find({
+			companyId: companyId,
+		})
+
+		if (!jobPostings) {
+			return res.status(404).json({ message: 'No job postings.' })
+		}
+
+		return res.status(200).json(jobPostings)
+	} catch (error) {
+		console.log(error)
+		return res.sendStatus(400)
+	}
+}
+
 const CompanyProfileController = {
 	getCompanyProfile,
 	getCompanyPublicProfile,
 	editCompanyProfile,
+	getCompanyJobPosts,
 }
 
 export default CompanyProfileController

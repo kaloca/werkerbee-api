@@ -14,6 +14,10 @@ CompanyRouter.get(
 	'/company/:username',
 	controllers.CompanyProfileController.getCompanyPublicProfile
 )
+CompanyRouter.get(
+	'/company/:username/posts',
+	controllers.CompanyProfileController.getCompanyJobPosts	
+)
 CompanyRouter.put(
 	'/company/profile',
 	requireAuth,
