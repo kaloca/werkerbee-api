@@ -12,8 +12,6 @@ export interface ICompany extends Document {
 	type: string
 	overallRating: number
 	jobTypes: string[]
-	currentPostings: Schema.Types.ObjectId[]
-	pastJobs: Schema.Types.ObjectId[]
 	hashedPassword: string
 	address: Address
 	bankInfo: BankAccount

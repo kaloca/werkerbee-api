@@ -126,7 +126,7 @@ const getJobApplications = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Job posting not found.' })
 		}
 
-		if (String(jobPosting.companyId) !== String(req.user?.userId)) {
+		if (String(jobPosting.company) !== String(req.user?.userId)) {
 			return res
 				.status(403)
 				.json({ message: 'Unauthorized to access this job posting.' })

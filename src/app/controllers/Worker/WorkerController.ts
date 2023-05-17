@@ -4,6 +4,8 @@ import { IWorker } from '@/app/interfaces/models/Worker'
 import WorkerModel from '@/app/models/WorkerModel'
 import JobModel from '@/app/models/JobModel'
 import { IJob } from '@/app/interfaces/models/Job'
+import { IJobApplication } from '@/app/interfaces/models/JobApplication'
+import JobApplicationModel from '@/app/models/JobApplicationModel'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -48,11 +50,7 @@ const getApplications = async (req: Request, res: Response) => {
 	const workerId = req.user?.userId
 
 	try {
-		const worker = await WorkerModel.findById(workerId).populate(
-			'currentApplications'
-		)
-
-		console.log(worker)
+		const worker = await WorkerModel.findById(workerId)
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found' })
@@ -62,7 +60,12 @@ const getApplications = async (req: Request, res: Response) => {
 			return res.status(403).json({ message: 'Unauthorized' })
 		}
 
-		res.status(200).json({ applications: worker.currentApplications })
+		const applications: IJobApplication[] | null =
+			await JobApplicationModel.find({
+				worker: workerId,
+			})
+
+		res.status(200).json({ applications })
 	} catch (error) {
 		res.status(500).json({ message: 'Server error' })
 	}

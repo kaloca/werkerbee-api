@@ -26,8 +26,5 @@ export interface IWorker extends Document {
 	rating: number
 	jobTypes: string[]
 	experiences?: Experience[]
-	pastJobs?: Schema.Types.ObjectId[]
-	currentApplications?: IJobApplication[]
-	currentJobs?: Schema.Types.ObjectId[]
 	hashedPassword: string
 }

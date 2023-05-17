@@ -29,6 +29,7 @@ const CompanySchema = new Schema(
 			type: String,
 			required: true,
 			unique: true,
+			select: false,
 		},
 		location: {
 			type: String,
@@ -47,15 +48,6 @@ const CompanySchema = new Schema(
 			type: [jobTypes],
 			required: true,
 		},
-		currentPostings: {
-			type: [Schema.Types.ObjectId],
-			ref: 'JobPosting',
-			required: false,
-		},
-		pastJobs: {
-			type: [String],
-			required: false,
-		},
 		address: {
 			type: addressSchema,
 			required: true,
@@ -63,10 +55,12 @@ const CompanySchema = new Schema(
 		bankInfo: {
 			type: bankAccountSchema,
 			required: false,
+			select: false,
 		},
 		hashedPassword: {
 			type: String,
 			required: true,
+			select: false,
 		},
 	},
 	{

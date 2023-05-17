@@ -22,28 +22,15 @@ const workerSchema: Schema = new Schema({
 	phoneNumber: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
 	location: { type: String, required: true },
-	address: { type: addressSchema, required: true },
-	billingAddress: { type: addressSchema, required: false },
-	bankInfo: { type: bankAccountSchema, required: false },
-	ssn: { type: String, required: true, unique: true },
+	address: { type: addressSchema, required: true, select: false },
+	billingAddress: { type: addressSchema, required: false, select: false },
+	bankInfo: { type: bankAccountSchema, required: false, select: false },
+	ssn: { type: String, required: true, unique: true, select: false },
 	birthday: { type: Date, required: true },
 	rating: { type: Number, default: null },
 	jobTypes: { type: [String], required: true },
 	experiences: { type: [experienceSchema], required: false },
-	pastJobs: [{ type: Schema.Types.ObjectId, ref: 'Job', required: false }],
-	currentApplications: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'JobApplication',
-		},
-	],
-	currentJobs: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Job',
-		},
-	],
-	hashedPassword: { type: String, required: true },
+	hashedPassword: { type: String, required: true, select: false },
 	// documents: { type: Buffer, required: true },
 })
 

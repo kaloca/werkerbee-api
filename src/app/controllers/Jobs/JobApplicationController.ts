@@ -29,11 +29,12 @@ const applyForJob = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
-		if (
-			worker.currentApplications?.some(
-				(application) => application.jobPostingId.toString() == jobPostingId
-			)
-		) {
+		const application: IJobApplication | null =
+			await JobApplicationModel.findOne({
+				jobPosting: jobPostingId,
+			})
+
+		if (application) {
 			return res
 				.status(400)
 				.json({ message: 'You have already applied for this job' })
@@ -43,8 +44,7 @@ const applyForJob = async (req: Request, res: Response) => {
 		const jobApplication = new JobApplicationModel({
 			workerId,
 			jobType: jobPosting.type,
-			companyName: jobPosting.companyName,
-			companyId: jobPosting.companyId,
+			companyId: jobPosting.company,
 			jobTitle: jobPosting.name,
 			jobPostingId,
 			status: 'PENDING',
@@ -53,9 +53,6 @@ const applyForJob = async (req: Request, res: Response) => {
 
 		jobPosting.applications.push(jobApplication._id)
 		await jobPosting.save()
-
-		worker.currentApplications?.push(jobApplication._id)
-		await worker.save()
 
 		res.status(200).json({ message: 'Application submitted successfully.' })
 	} catch (error) {
@@ -77,7 +74,7 @@ export const updateStatus = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Job application not found.' })
 		}
 
-		if (String(jobApplication.companyId) != companyId) {
+		if (String(jobApplication.company) != companyId) {
 			return res
 				.status(403)
 				.json({ message: 'Unauthorized to access this job application.' })
@@ -111,7 +108,7 @@ export const acceptApplication = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Job application not found.' })
 		}
 
-		if (String(jobApplication.companyId) != companyId) {
+		if (String(jobApplication.company) != companyId) {
 			return res
 				.status(403)
 				.json({ message: 'Unauthorized to access this job application.' })
@@ -121,9 +118,7 @@ export const acceptApplication = async (req: Request, res: Response) => {
 			return res.status(400).json({ message: 'Application already accepted' })
 		}
 
-		const jobPosting = await JobPostingModel.findById(
-			jobApplication.jobPostingId
-		)
+		const jobPosting = await JobPostingModel.findById(jobApplication.jobPosting)
 
 		if (!jobPosting) {
 			return res.status(500).json({ message: 'Something went wrong (102)' })
@@ -134,7 +129,7 @@ export const acceptApplication = async (req: Request, res: Response) => {
 
 		const job: IJob = new JobModel({
 			name: jobPosting.name,
-			workerId: jobApplication.workerId,
+			workerId: jobApplication.worker,
 			companyId: companyId,
 			jobPostingId: jobPosting.id,
 		})

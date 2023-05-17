@@ -14,7 +14,9 @@ const login = async (req: Request, res: Response) => {
 		console.log(req.body)
 		const { email, password } = req.body
 
-		const worker: IWorker | null = await WorkerModel.findOne({ email }).exec()
+		const worker: IWorker | null = await WorkerModel.findOne({ email }).select(
+			'+hashedPassword'
+		)
 		const company: ICompany | null = await CompanyModel.findOne({
 			email,
 		}).exec()

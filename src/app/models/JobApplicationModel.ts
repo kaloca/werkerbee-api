@@ -4,12 +4,9 @@ import { IJobApplication } from '../interfaces/models/JobApplication'
 
 const JobApplicationSchema = new Schema(
 	{
-		workerId: { type: Schema.Types.ObjectId, ref: 'Worker', required: true },
-		companyId: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
-		companyName: { type: String, required: true },
-		jobTitle: { type: String, required: true },
-		jobType: { type: String, required: true },
-		jobPostingId: {
+		worker: { type: Schema.Types.ObjectId, ref: 'Worker', required: true },
+		company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+		jobPosting: {
 			type: Schema.Types.ObjectId,
 			ref: 'JobPosting',
 			required: true,

@@ -33,12 +33,11 @@ const getCompanyPublicProfile = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Company not found.' })
 		}
 
-		const { name, location, overallRating, type, jobTypes, currentPostings } =
-			company
+		const { name, location, overallRating, type, jobTypes } = company
 
 		return res
 			.status(200)
-			.json({ name, location, overallRating, type, jobTypes, currentPostings })
+			.json({ name, location, overallRating, type, jobTypes })
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)
