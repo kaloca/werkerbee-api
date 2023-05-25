@@ -24,5 +24,9 @@ WorkerRouter.get(
 	requireAuth,
 	controllers.WorkerController.getJobs
 )
-
+WorkerRouter.get(
+	'/worker/:username/jobs/calendar',
+	requireAuth,
+	controllers.WorkerController.getJobsCalendar
+)
 export default WorkerRouter
