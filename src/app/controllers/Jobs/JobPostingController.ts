@@ -3,6 +3,10 @@ import { Request, Response } from 'express'
 import JobPostingModel from '@/app/models/JobPostingModel'
 import CompanyModel from '@/app/models/CompanyModel'
 import { ICompany } from '@/app/interfaces/models/Company'
+import { IJobApplication } from '@/app/interfaces/models/JobApplication'
+import JobApplicationModel from '@/app/models/JobApplicationModel'
+import { IJobPosting } from '@/app/interfaces/models/JobPosting'
+import WorkerModel from '@/app/models/WorkerModel'
 
 const createJobPosting = async (req: Request, res: Response) => {
 	const company: ICompany | null = await CompanyModel.findById(req.user?.userId)
@@ -15,8 +19,7 @@ const createJobPosting = async (req: Request, res: Response) => {
 
 	const newJobPosting = new JobPostingModel({
 		...req.body,
-		companyId: company._id,
-		companyName: company.name,
+		company: company._id,
 		location: company.location,
 	})
 
@@ -74,9 +77,8 @@ const getJobPosting = async (req: Request, res: Response) => {
 
 	try {
 		const jobPosting = await JobPostingModel.findById(id).populate({
-			path: 'companyId',
-			select:
-				'-hashedPassword -__v -email -billingAddress -pastJobs -createdAt -updatedAt -username -bankInfo',
+			path: 'company',
+			select: '-email -createdAt -updatedAt -username',
 		})
 
 		if (!jobPosting) {
@@ -95,13 +97,66 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	const page = parseInt(req.query.page as string) || 1
 	const limit = parseInt(req.query.limit as string) || 10
 
-	try {
-		const jobPostings = await JobPostingModel.find()
-			.skip((page - 1) * limit)
-			.limit(limit)
-			.exec()
+	// Extract filter params
+	const dayOfWeek = req.query.dayOfWeek as string
+	const minPay = parseInt(req.query.minPay as string)
+	const jobType = req.query.jobType as string
+	const requesterLocation = req.query.requesterLocation as string
+	const requesterDistance = parseFloat(req.query.requesterDistance as string)
 
-		const totalJobPostings = await JobPostingModel.countDocuments()
+	// Build match stage
+	const matchStage: any = {}
+	if (dayOfWeek) matchStage.dayOfWeek = dayOfWeek
+	if (minPay) matchStage.payment = { $gte: minPay }
+	if (jobType) matchStage.type = jobType
+
+	const geoNearStage =
+		requesterLocation && requesterDistance
+			? {
+					$geoNear: {
+						near: {
+							type: 'Point',
+							coordinates: [
+								parseFloat(requesterLocation.split(',')[0]),
+								parseFloat(requesterLocation.split(',')[1]),
+							],
+						},
+						distanceField: 'distance',
+						spherical: true,
+						maxDistance: requesterDistance * 1609.34, // miles to meters
+					},
+			  }
+			: null
+
+	const pipeline = [
+		geoNearStage,
+		Object.keys(matchStage).length > 0 ? { $match: matchStage } : null,
+		{
+			$lookup: {
+				from: 'companies',
+				localField: 'company',
+				foreignField: '_id',
+				as: 'company',
+			},
+		},
+		{ $unwind: '$company' }, // Flatten the 'company' array
+		{
+			$addFields: {
+				companyName: '$company.name',
+				distanceInMiles: geoNearStage
+					? { $divide: ['$distance', 1609.34] }
+					: undefined, // Convert 'distance' from meters to miles
+			},
+		},
+		{ $project: { company: 0, distance: geoNearStage ? 0 : undefined } }, // Exclude 'company' and 'distance' fields
+		{ $skip: (page - 1) * limit },
+		{ $limit: limit },
+	].filter(Boolean) // Filter out any stages that are empty
+
+	try {
+		const jobPostings = await JobPostingModel.aggregate(pipeline as any)
+
+		const totalJobPostings = await JobPostingModel.countDocuments(matchStage)
 		const totalPages = Math.ceil(totalJobPostings / limit)
 
 		res.json({
@@ -116,29 +171,67 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 
 const getJobApplications = async (req: Request, res: Response) => {
 	try {
+		const companyId = req.user?.userId
+
 		const jobPostingId = req.params.id
 
-		const jobPosting = await JobPostingModel.findById(jobPostingId).populate(
-			'applications'
+		const jobPosting: IJobPosting | null = await JobPostingModel.findById(
+			jobPostingId
 		)
 
 		if (!jobPosting) {
-			return res.status(404).json({ message: 'Job posting not found.' })
+			return res.status(500).json({ message: 'Job posting not found' })
 		}
 
-		if (String(jobPosting.company) !== String(req.user?.userId)) {
+		if (companyId != jobPosting.company) {
 			return res
 				.status(403)
-				.json({ message: 'Unauthorized to access this job posting.' })
+				.json({ message: 'Not authorized to view resource' })
 		}
 
-		res.status(200).json({ applications: jobPosting.applications })
+		const applications: IJobApplication[] | null =
+			await JobApplicationModel.find({ jobPosting: jobPostingId }).populate(
+				'worker'
+			)
+
+		if (!applications) {
+			return res
+				.status(404)
+				.json({ message: 'No applications for this job posting.' })
+		}
+
+		// if (String(jobPosting.company) !== String(req.user?.userId)) {
+		// 	return res
+		// 		.status(403)
+		// 		.json({ message: 'Unauthorized to access this job posting.' })
+		// }
+
+		res.status(200).json({ applications, jobName: jobPosting.name })
 	} catch (error) {
 		res.status(500).json({
 			message: 'An error occurred while fetching job applications.',
 			error,
 		})
 	}
+}
+
+const getNearbyJobPostings = async (req: Request, res: Response) => {
+	// Then, use that location to find nearby job postings
+	await CompanyModel.ensureIndexes().catch((err) => console.log(err))
+	const nearbyJobPostings = await CompanyModel.find({
+		location: {
+			$near: {
+				$geometry: {
+					type: 'Point',
+					coordinates: [-122.1639, 37.423], // [longitude, latitude]
+				},
+				// Optionally, specify a maximum distance (in meters)
+				// $maxDistance: 1000,
+			},
+		},
+	})
+
+	return res.json(nearbyJobPostings)
 }
 
 const JobPostingController = {
@@ -148,6 +241,7 @@ const JobPostingController = {
 	getAllJobPostings,
 	getJobApplications,
 	getJobPosting,
+	getNearbyJobPostings,
 }
 
 export default JobPostingController
