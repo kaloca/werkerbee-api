@@ -17,7 +17,9 @@ export interface IWorker extends Document {
 	bio: string
 	phoneNumber: string
 	email: string
-	location: string
+	location: {
+		coordinates: [number, number]
+	}
 	address: Address
 	billingAddress?: Address
 	bankInfo?: BankAccount

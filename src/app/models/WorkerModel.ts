@@ -3,6 +3,7 @@ import mongoose, { Schema } from 'mongoose'
 import { IWorker } from '../interfaces/models/Worker'
 import addressSchema from './schemas/addressSchema'
 import bankAccountSchema from './schemas/bankAccountSchema'
+import pointSchema from './schemas/pointSchema'
 
 const experienceSchema: Schema = new Schema({
 	company: { type: String, required: true },
@@ -21,7 +22,7 @@ const workerSchema: Schema = new Schema({
 	bio: { type: String, required: false },
 	phoneNumber: { type: String, required: true, unique: true },
 	email: { type: String, required: true, unique: true },
-	location: { type: String, required: true },
+	location: { type: pointSchema, required: true },
 	address: { type: addressSchema, required: true, select: false },
 	billingAddress: { type: addressSchema, required: false, select: false },
 	bankInfo: { type: bankAccountSchema, required: false, select: false },
@@ -33,5 +34,7 @@ const workerSchema: Schema = new Schema({
 	hashedPassword: { type: String, required: true, select: false },
 	// documents: { type: Buffer, required: true },
 })
+
+workerSchema.index({ location: '2dsphere' })
 
 export default mongoose.model<IWorker>('Worker', workerSchema)

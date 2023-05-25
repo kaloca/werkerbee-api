@@ -8,9 +8,11 @@ export interface IJobPosting extends Document {
 	dressCode: string
 	requiredSkills: string
 	requiredCertifications: string
-	time: string
+	start: Date
+	end: Date
+	dayOfWeek: string
 	type: string
-	payment: string
+	payment: number
 	applications: Schema.Types.ObjectId[]
 	createdAt: Date
 	updatedAt: Date

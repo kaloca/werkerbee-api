@@ -25,6 +25,10 @@ JobPostingRouter.get(
 	controllers.JobPostingController.getAllJobPostings
 )
 JobPostingRouter.get(
+	'/job-postings/nearby',
+	controllers.JobPostingController.getNearbyJobPostings
+)
+JobPostingRouter.get(
 	'/job-post/:id/applications',
 	requireAuth,
 	controllers.JobPostingController.getJobApplications

@@ -4,6 +4,7 @@ import { ICompany } from '../interfaces/models/Company'
 
 import addressSchema from './schemas/addressSchema'
 import bankAccountSchema from './schemas/bankAccountSchema'
+import pointSchema from './schemas/pointSchema'
 
 const jobTypes: Schema = new Schema({
 	type: { type: String, required: true },
@@ -32,7 +33,7 @@ const CompanySchema = new Schema(
 			select: false,
 		},
 		location: {
-			type: String,
+			type: pointSchema,
 			required: true,
 		},
 		type: {
@@ -67,4 +68,7 @@ const CompanySchema = new Schema(
 		timestamps: true,
 	}
 )
+
+CompanySchema.index({ location: '2dsphere' })
+
 export default mongoose.model<ICompany>('Company', CompanySchema)
