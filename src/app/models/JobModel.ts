@@ -29,7 +29,14 @@ const JobSchema = new Schema(
 			enum: ['PENDING', 'COMPLETE', 'CANCELED'],
 			default: 'PENDING',
 		},
-		time: {},
+		shiftStart: {
+			type: Date,
+			required: true,
+		},
+		shiftEnd: {
+			type: Date,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

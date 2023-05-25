@@ -12,25 +12,27 @@ import { IJobApplication } from '@/app/interfaces/models/JobApplication'
 
 const applyForJob = async (req: Request, res: Response) => {
 	try {
+		console.log('heer')
 		const jobPostingId = req.params.id
 		const workerId = req.user?.userId || 'id'
 
 		const jobPosting: IJobPosting | null = await JobPostingModel.findById(
 			jobPostingId
-		)
+		).select('+applications')
+
 		if (!jobPosting) {
 			return res.status(404).json({ message: 'Job not found.' })
 		}
 
-		const worker: IWorker | null = await WorkerModel.findById(
-			workerId
-		).populate('currentApplications')
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
+		console.log(worker?.name)
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
 		const application: IJobApplication | null =
 			await JobApplicationModel.findOne({
+				worker: workerId,
 				jobPosting: jobPostingId,
 			})
 
@@ -39,14 +41,12 @@ const applyForJob = async (req: Request, res: Response) => {
 				.status(400)
 				.json({ message: 'You have already applied for this job' })
 		}
-
+		console.log('nowhere')
 		// Create a new job application instance
 		const jobApplication = new JobApplicationModel({
-			workerId,
-			jobType: jobPosting.type,
-			companyId: jobPosting.company,
-			jobTitle: jobPosting.name,
-			jobPostingId,
+			worker: workerId,
+			company: jobPosting.company,
+			jobPosting: jobPostingId,
 			status: 'PENDING',
 		})
 		await jobApplication.save()
@@ -56,6 +56,7 @@ const applyForJob = async (req: Request, res: Response) => {
 
 		res.status(200).json({ message: 'Application submitted successfully.' })
 	} catch (error) {
+		console.log(error)
 		res
 			.status(500)
 			.json({ message: 'An error occurred while applying for the job.', error })
@@ -132,6 +133,8 @@ export const acceptApplication = async (req: Request, res: Response) => {
 			workerId: jobApplication.worker,
 			companyId: companyId,
 			jobPostingId: jobPosting.id,
+			shiftStart: jobPosting.start,
+			shiftEnd: jobPosting.end,
 		})
 
 		await job.save()

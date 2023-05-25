@@ -7,7 +7,8 @@ export interface IJob extends Document {
 	company: string
 	jobPosting: string
 	status: 'PENDING' | 'COMPLETE' | 'CANCELED'
-	time: {}
+	shiftStart: Date
+	shiftEnd: Date
 	createdAt: Date
 	updatedAt: Date
 }
