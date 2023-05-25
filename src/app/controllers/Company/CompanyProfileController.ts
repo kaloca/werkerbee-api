@@ -40,7 +40,7 @@ const getCompanyPublicProfile = async (req: Request, res: Response) => {
 			.json({ name, location, overallRating, type, jobTypes })
 	} catch (error) {
 		console.log(error)
-		return res.sendStatus(400)
+		return res.sendStatus(500)
 	}
 }
 
@@ -94,8 +94,8 @@ const getCompanyJobPosts = async (req: Request, res: Response) => {
 		const companyId = company.id
 
 		const jobPostings: IJobPosting[] | null = await JobPostingModel.find({
-			companyId: companyId,
-		})
+			company: companyId,
+		}).select('+applications')
 
 		if (!jobPostings) {
 			return res.status(404).json({ message: 'No job postings.' })
@@ -104,7 +104,7 @@ const getCompanyJobPosts = async (req: Request, res: Response) => {
 		return res.status(200).json(jobPostings)
 	} catch (error) {
 		console.log(error)
-		return res.sendStatus(400)
+		return res.sendStatus(500)
 	}
 }
 
