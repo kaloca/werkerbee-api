@@ -98,17 +98,19 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	const limit = parseInt(req.query.limit as string) || 10
 
 	// Extract filter params
-	const dayOfWeek = req.query.dayOfWeek as string
+	const dayOfWeek = req.query.dayOfWeek as string[]
 	const minPay = parseInt(req.query.minPay as string)
-	const jobType = req.query.jobType as string
+	const jobType = req.query.jobType as string[]
 	const requesterLocation = req.query.requesterLocation as string
 	const requesterDistance = parseFloat(req.query.requesterDistance as string)
+	const sortField = req.query.sort as string // This is the field to sort by
+	const sortOrder = parseInt(req.query.order as string) || 1 // This is the order to sort in. 1 for ascending, -1 for descending.
 
 	// Build match stage
 	const matchStage: any = {}
-	if (dayOfWeek) matchStage.dayOfWeek = dayOfWeek
+	if (dayOfWeek) matchStage.dayOfWeek = { $in: dayOfWeek }
 	if (minPay) matchStage.payment = { $gte: minPay }
-	if (jobType) matchStage.type = jobType
+	if (jobType) matchStage.type = { $in: jobType }
 
 	const geoNearStage =
 		requesterLocation && requesterDistance
@@ -127,6 +129,10 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 					},
 			  }
 			: null
+
+	const projectionStage = geoNearStage
+		? { $project: { company: 0, distance: 0 } }
+		: { $project: { company: 0 } }
 
 	const pipeline = [
 		geoNearStage,
@@ -148,7 +154,8 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 					: undefined, // Convert 'distance' from meters to miles
 			},
 		},
-		{ $project: { company: 0, distance: geoNearStage ? 0 : undefined } }, // Exclude 'company' and 'distance' fields
+		projectionStage,
+		{ $sort: { [sortField]: sortOrder } }, // Add the sort stage here
 		{ $skip: (page - 1) * limit },
 		{ $limit: limit },
 	].filter(Boolean) // Filter out any stages that are empty
