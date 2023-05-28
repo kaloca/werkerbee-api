@@ -34,10 +34,10 @@ const createJobPosting = async (req: Request, res: Response) => {
 const updateJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
 	const companyId = req.user?.userId
-
+	console.log(req.params, req.user)
 	try {
 		const updatedJobPosting = await JobPostingModel.findOneAndUpdate(
-			{ _id: id, companyId },
+			{ _id: id, company: companyId },
 			req.body,
 			{ new: true, runValidators: true }
 		)
@@ -48,6 +48,7 @@ const updateJobPosting = async (req: Request, res: Response) => {
 
 		res.status(200).json(updatedJobPosting)
 	} catch (error) {
+		console.log(error)
 		res.status(400).json({ error: (error as Error).message })
 	}
 }
@@ -94,21 +95,25 @@ const getJobPosting = async (req: Request, res: Response) => {
 }
 
 const getAllJobPostings = async (req: Request, res: Response) => {
+	console.log(req.query)
 	const page = parseInt(req.query.page as string) || 1
 	const limit = parseInt(req.query.limit as string) || 10
 
 	// Extract filter params
-	const dayOfWeek = req.query.dayOfWeek as string[]
+	const dayOfWeek = Array.isArray(req.query.dayOfWeek)
+		? req.query.dayOfWeek
+		: [req.query.dayOfWeek]
 	const minPay = parseInt(req.query.minPay as string)
 	const jobType = req.query.jobType as string[]
 	const requesterLocation = req.query.requesterLocation as string
-	const requesterDistance = parseFloat(req.query.requesterDistance as string)
+	const requesterDistance =
+		parseFloat(req.query.requesterDistance as string) || 10
 	const sortField = req.query.sort as string // This is the field to sort by
 	const sortOrder = parseInt(req.query.order as string) || 1 // This is the order to sort in. 1 for ascending, -1 for descending.
-
 	// Build match stage
 	const matchStage: any = {}
-	if (dayOfWeek) matchStage.dayOfWeek = { $in: dayOfWeek }
+	if (dayOfWeek.length > 0 && dayOfWeek[0] != undefined)
+		matchStage.dayOfWeek = { $in: dayOfWeek }
 	if (minPay) matchStage.payment = { $gte: minPay }
 	if (jobType) matchStage.type = { $in: jobType }
 
