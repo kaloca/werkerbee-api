@@ -16,4 +16,9 @@ routes.use(CompanyRouter)
 routes.use(JobPostingRouter)
 routes.use(WorkerRouter)
 
+// Health Check
+routes.get('/', (req, res) =>
+	res.status(200).json({ message: 'Health Check OK' })
+)
+
 export default routes
