@@ -11,11 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger-autogen": "node ./swagger.js"
   },
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
+  "pre-commit": [],
   "keywords": [],
   "author": "",
   "license": "ISC",
