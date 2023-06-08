@@ -11,6 +11,12 @@ const app = express()
 
 app.use(cors())
 app.use(bodyParser.json())
+
+// Middleware to delay all requests by 3 seconds
+// app.use((req, res, next) => {
+// 	setTimeout(next, 3000)
+// })
+
 app.use(routes)
 
 const mongoUrl = MONGODB_URI as string
