@@ -16,6 +16,10 @@ app.use(body_parser_1.default.json());
 // app.use((req, res, next) => {
 // 	setTimeout(next, 3000)
 // })
+// Health Check
+app.get('/', (_req, res) => {
+    return res.send('Express Typescript on Vercel');
+});
 app.use(routes_1.default);
 const mongoUrl = secrets_1.MONGODB_URI;
 mongoose_1.default.connect(mongoUrl);

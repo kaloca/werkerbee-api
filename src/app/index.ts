@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 
@@ -16,6 +16,11 @@ app.use(bodyParser.json())
 // app.use((req, res, next) => {
 // 	setTimeout(next, 3000)
 // })
+
+// Health Check
+app.get('/', (_req: Request, res: Response) => {
+	return res.send('Express Typescript on Vercel')
+})
 
 app.use(routes)
 
