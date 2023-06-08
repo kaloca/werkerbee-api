@@ -5,9 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger-autogen": "node ./swagger.js"
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +28,8 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.15.11",
     "nodemon": "^2.0.22",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.1",
     "swagger-autogen": "^2.23.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
