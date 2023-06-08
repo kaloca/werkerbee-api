@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "build": "babel src --out-dir dist --extensions '.ts,.tsx' --source-maps inline",
+    "build": "npx babel src --out-dir dist --extensions '.ts,.tsx' --source-maps inline",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.4",
     "@babel/preset-typescript": "^7.21.5",
     "@types/bcrypt": "^5.0.0",
@@ -36,7 +37,6 @@
     "typescript": "^5.0.3"
   },
   "dependencies": {
-    "@babel/core": "^7.22.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
