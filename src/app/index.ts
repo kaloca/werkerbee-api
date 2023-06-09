@@ -1,14 +1,17 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
+import compression from 'compression'
+import helmet from 'helmet'
 
 import routes from './routes'
-import mongoose from 'mongoose'
 
 import { MONGODB_URI, SESSION_SECRET } from './util/secrets'
 
 const app = express()
 
+app.use(compression())
 app.use(cors())
 app.use(bodyParser.json())
 
