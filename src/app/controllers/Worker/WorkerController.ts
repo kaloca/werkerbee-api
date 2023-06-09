@@ -51,7 +51,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 const getApplications = async (req: Request, res: Response) => {
 	const username = req.params.username
 	const workerId = req.user?.userId
-	const { status, page, limit } = req.query
+	const { status, past, page, limit } = req.query
 
 	console.log(req.query)
 
@@ -80,7 +80,12 @@ const getApplications = async (req: Request, res: Response) => {
 		const applications: IJobApplication[] = await JobApplicationModel.find(
 			query
 		)
-			.populate('jobPosting company')
+			.populate({
+				path: 'jobPosting',
+				match: {},
+				//match: past == 'false' ? { start: { $gte: new Date() } } : {},
+			})
+			.populate('company')
 			.sort({ createdAt: -1 })
 			.skip((pageAsNumber - 1) * limitAsNumber)
 			.limit(limitAsNumber)
@@ -132,6 +137,7 @@ const getJobs = async (req: Request, res: Response) => {
 }
 
 const getJobsCalendar = async (req: Request, res: Response) => {
+	const workerId = req.user?.userId
 	// Get number of days from request or default to 7
 	const numberOfDays = Number(req.query.days) || 7
 
@@ -147,6 +153,7 @@ const getJobsCalendar = async (req: Request, res: Response) => {
 			$gte: startOfWeek.toDate(),
 			$lt: endDate.toDate(),
 		},
+		workerId,
 	}).lean()
 
 	const days = []
