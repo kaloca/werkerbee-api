@@ -2,6 +2,17 @@ import mongoose, { Schema } from 'mongoose'
 
 import { IJob } from '../interfaces/models/Job'
 
+const BreakSchema = new Schema({
+	start: {
+		type: Date,
+		required: true,
+	},
+	end: {
+		type: Date,
+		required: false,
+	},
+})
+
 const JobSchema = new Schema(
 	{
 		name: {
@@ -36,6 +47,18 @@ const JobSchema = new Schema(
 		shiftEnd: {
 			type: Date,
 			required: true,
+		},
+		clockStart: {
+			type: Date,
+			required: false,
+		},
+		clockEnd: {
+			type: Date,
+			required: false,
+		},
+		breaks: {
+			type: [BreakSchema],
+			required: false,
 		},
 	},
 	{

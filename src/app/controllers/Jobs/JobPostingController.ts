@@ -108,8 +108,8 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	const requesterLocation = req.query.requesterLocation as string
 	const requesterDistance =
 		parseFloat(req.query.requesterDistance as string) || 10
-	const sortField = req.query.sort as string // This is the field to sort by
-	const sortOrder = parseInt(req.query.order as string) || 1 // This is the order to sort in. 1 for ascending, -1 for descending.
+	const sortField = req.query.sortBy as string // This is the field to sort by
+	const sortOrder = parseInt(req.query.order as string) || -1 // This is the order to sort in. 1 for ascending, -1 for descending.
 	// Build match stage
 	const matchStage: any = {}
 	if (dayOfWeek.length > 0 && dayOfWeek[0] != undefined)

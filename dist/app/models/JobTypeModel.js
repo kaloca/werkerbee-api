@@ -1,0 +1,17 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _mongoose = require("mongoose");
+var JobTypeSchema = new _mongoose.Schema({
+  type: {
+    type: String,
+    required: true,
+    unique: true
+  }
+});
+var _default = (0, _mongoose.model)('JobType', JobTypeSchema);
+exports["default"] = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJfbW9uZ29vc2UiLCJyZXF1aXJlIiwiSm9iVHlwZVNjaGVtYSIsIlNjaGVtYSIsInR5cGUiLCJTdHJpbmciLCJyZXF1aXJlZCIsInVuaXF1ZSIsIl9kZWZhdWx0IiwibW9kZWwiLCJleHBvcnRzIl0sInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcC9tb2RlbHMvSm9iVHlwZU1vZGVsLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFNjaGVtYSwgbW9kZWwgfSBmcm9tICdtb25nb29zZSdcblxuaW1wb3J0IHsgSUpvYlR5cGUgfSBmcm9tICcuLi9pbnRlcmZhY2VzL21vZGVscy9Kb2JUeXBlJ1xuXG5jb25zdCBKb2JUeXBlU2NoZW1hOiBTY2hlbWEgPSBuZXcgU2NoZW1hKHtcblx0dHlwZTogeyB0eXBlOiBTdHJpbmcsIHJlcXVpcmVkOiB0cnVlLCB1bmlxdWU6IHRydWUgfSxcbn0pXG5cbmV4cG9ydCBkZWZhdWx0IG1vZGVsPElKb2JUeXBlPignSm9iVHlwZScsIEpvYlR5cGVTY2hlbWEpXG4iXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBLElBQUFBLFNBQUEsR0FBQUMsT0FBQTtBQUlBLElBQU1DLGFBQXFCLEdBQUcsSUFBSUMsZ0JBQU0sQ0FBQztFQUN4Q0MsSUFBSSxFQUFFO0lBQUVBLElBQUksRUFBRUMsTUFBTTtJQUFFQyxRQUFRLEVBQUUsSUFBSTtJQUFFQyxNQUFNLEVBQUU7RUFBSztBQUNwRCxDQUFDLENBQUM7QUFBQSxJQUFBQyxRQUFBLEdBRWEsSUFBQUMsZUFBSyxFQUFXLFNBQVMsRUFBRVAsYUFBYSxDQUFDO0FBQUFRLE9BQUEsY0FBQUYsUUFBQSJ9

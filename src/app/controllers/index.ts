@@ -4,6 +4,7 @@ import CompanyProfileController from './Company/CompanyProfileController'
 import JobApplicationController from './Jobs/JobApplicationController'
 import JobPostingController from './Jobs/JobPostingController'
 import JobTypeController from './Jobs/JobTypeController'
+import JobController from './Jobs/JobController'
 import WorkerController from './Worker/WorkerController'
 import WorkerEditController from './Worker/WorkerEditController'
 import NotificationsController from './Notifications/NotificationsController'
@@ -15,6 +16,7 @@ const controllers = {
 	JobApplicationController,
 	JobPostingController,
 	JobTypeController,
+	JobController,
 	WorkerController,
 	WorkerEditController,
 	NotificationsController,

@@ -1,0 +1,26 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _mongoose = require("mongoose");
+var bankAccountSchema = new _mongoose.Schema({
+  bankName: {
+    type: String,
+    required: true
+  },
+  accountNumber: {
+    type: String,
+    required: true
+  },
+  routingNumber: {
+    type: String,
+    required: true
+  }
+}, {
+  _id: false
+});
+var _default = bankAccountSchema;
+exports["default"] = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJfbW9uZ29vc2UiLCJyZXF1aXJlIiwiYmFua0FjY291bnRTY2hlbWEiLCJTY2hlbWEiLCJiYW5rTmFtZSIsInR5cGUiLCJTdHJpbmciLCJyZXF1aXJlZCIsImFjY291bnROdW1iZXIiLCJyb3V0aW5nTnVtYmVyIiwiX2lkIiwiX2RlZmF1bHQiLCJleHBvcnRzIl0sInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vc3JjL2FwcC9tb2RlbHMvc2NoZW1hcy9iYW5rQWNjb3VudFNjaGVtYS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBTY2hlbWEgfSBmcm9tICdtb25nb29zZSdcblxuY29uc3QgYmFua0FjY291bnRTY2hlbWE6IFNjaGVtYSA9IG5ldyBTY2hlbWEoXG5cdHtcblx0XHRiYW5rTmFtZTogeyB0eXBlOiBTdHJpbmcsIHJlcXVpcmVkOiB0cnVlIH0sXG5cdFx0YWNjb3VudE51bWJlcjogeyB0eXBlOiBTdHJpbmcsIHJlcXVpcmVkOiB0cnVlIH0sXG5cdFx0cm91dGluZ051bWJlcjogeyB0eXBlOiBTdHJpbmcsIHJlcXVpcmVkOiB0cnVlIH0sXG5cdH0sXG5cdHsgX2lkOiBmYWxzZSB9XG4pXG5cbmV4cG9ydCBkZWZhdWx0IGJhbmtBY2NvdW50U2NoZW1hXG4iXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBLElBQUFBLFNBQUEsR0FBQUMsT0FBQTtBQUVBLElBQU1DLGlCQUF5QixHQUFHLElBQUlDLGdCQUFNLENBQzNDO0VBQ0NDLFFBQVEsRUFBRTtJQUFFQyxJQUFJLEVBQUVDLE1BQU07SUFBRUMsUUFBUSxFQUFFO0VBQUssQ0FBQztFQUMxQ0MsYUFBYSxFQUFFO0lBQUVILElBQUksRUFBRUMsTUFBTTtJQUFFQyxRQUFRLEVBQUU7RUFBSyxDQUFDO0VBQy9DRSxhQUFhLEVBQUU7SUFBRUosSUFBSSxFQUFFQyxNQUFNO0lBQUVDLFFBQVEsRUFBRTtFQUFLO0FBQy9DLENBQUMsRUFDRDtFQUFFRyxHQUFHLEVBQUU7QUFBTSxDQUNkLENBQUM7QUFBQSxJQUFBQyxRQUFBLEdBRWNULGlCQUFpQjtBQUFBVSxPQUFBLGNBQUFELFFBQUEifQ==

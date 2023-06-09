@@ -1,0 +1,12 @@
+"use strict";
+
+var _app = _interopRequireDefault(require("./app"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+// Get port from environment and store in Express.
+var port = process.env.PORT || 3000;
+
+// Create HTTP server.
+_app["default"].listen(port, function () {
+  return console.log("Listening at port ".concat(port));
+});
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJfYXBwIiwiX2ludGVyb3BSZXF1aXJlRGVmYXVsdCIsInJlcXVpcmUiLCJvYmoiLCJfX2VzTW9kdWxlIiwicG9ydCIsInByb2Nlc3MiLCJlbnYiLCJQT1JUIiwiYXBwIiwibGlzdGVuIiwiY29uc29sZSIsImxvZyIsImNvbmNhdCJdLCJzb3VyY2VzIjpbIi4uL3NyYy9pbmRleC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXBwIGZyb20gJy4vYXBwJ1xuXG4vLyBHZXQgcG9ydCBmcm9tIGVudmlyb25tZW50IGFuZCBzdG9yZSBpbiBFeHByZXNzLlxuY29uc3QgcG9ydCA9IHByb2Nlc3MuZW52LlBPUlQgfHwgMzAwMFxuXG4vLyBDcmVhdGUgSFRUUCBzZXJ2ZXIuXG5hcHAubGlzdGVuKHBvcnQsICgpID0+IGNvbnNvbGUubG9nKGBMaXN0ZW5pbmcgYXQgcG9ydCAke3BvcnR9YCkpXG4iXSwibWFwcGluZ3MiOiI7O0FBQUEsSUFBQUEsSUFBQSxHQUFBQyxzQkFBQSxDQUFBQyxPQUFBO0FBQXVCLFNBQUFELHVCQUFBRSxHQUFBLFdBQUFBLEdBQUEsSUFBQUEsR0FBQSxDQUFBQyxVQUFBLEdBQUFELEdBQUEsZ0JBQUFBLEdBQUE7QUFFdkI7QUFDQSxJQUFNRSxJQUFJLEdBQUdDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDQyxJQUFJLElBQUksSUFBSTs7QUFFckM7QUFDQUMsZUFBRyxDQUFDQyxNQUFNLENBQUNMLElBQUksRUFBRTtFQUFBLE9BQU1NLE9BQU8sQ0FBQ0MsR0FBRyxzQkFBQUMsTUFBQSxDQUFzQlIsSUFBSSxDQUFFLENBQUM7QUFBQSxFQUFDIn0=
