@@ -128,10 +128,55 @@ export const acceptApplication = async (req: Request, res: Response) => {
 		jobApplication.status = 'ACCEPTED'
 		await jobApplication.save()
 
+		res.status(200).json({
+			message: 'Accepted job application',
+		})
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while updating the job application status.',
+			error,
+		})
+	}
+}
+
+export const confirmJob = async (req: Request, res: Response) => {
+	try {
+		const { applicationId } = req.params
+		const workerId = req.user?.userId
+		// const { status } = req.body
+
+		const jobApplication: IJobApplication | null =
+			await JobApplicationModel.findById(applicationId)
+
+		if (!jobApplication) {
+			return res.status(404).json({ message: 'Job application not found.' })
+		}
+
+		if (String(jobApplication.worker) != workerId) {
+			return res
+				.status(403)
+				.json({ message: 'Unauthorized to access this job application.' })
+		}
+
+		if (jobApplication.status != 'ACCEPTED') {
+			return res
+				.status(400)
+				.json({ message: 'Cannot confirm job before being accepted' })
+		}
+
+		const jobPosting = await JobPostingModel.findById(jobApplication.jobPosting)
+
+		if (!jobPosting) {
+			return res.status(500).json({ message: 'Something went wrong (102)' })
+		}
+
+		jobApplication.status = 'SCHEDULED'
+		await jobApplication.save()
+
 		const job: IJob = new JobModel({
 			name: jobPosting.name,
 			workerId: jobApplication.worker,
-			companyId: companyId,
+			companyId: jobPosting.company,
 			jobPostingId: jobPosting.id,
 			shiftStart: jobPosting.start,
 			shiftEnd: jobPosting.end,
@@ -140,7 +185,7 @@ export const acceptApplication = async (req: Request, res: Response) => {
 		await job.save()
 
 		res.status(200).json({
-			message: 'Accepted job application. New job created',
+			message: 'Confirmed job application. New job created',
 			job,
 		})
 	} catch (error) {
@@ -155,6 +200,7 @@ const JobApplicationController = {
 	applyForJob,
 	updateStatus,
 	acceptApplication,
+	confirmJob,
 }
 
 export default JobApplicationController
