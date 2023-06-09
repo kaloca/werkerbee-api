@@ -3,9 +3,9 @@ import { Document } from 'mongoose'
 export interface INotification extends Document {
 	recipient: {
 		id: string
-		type: 'Worker' | 'Company'
+		type: 'worker' | 'company'
 	}
-	type: 'SYSTEM' | 'USER' | 'TRANSACTION' | 'OTHER'
+	type: 'PROMOTIONAL' | 'JOB' | 'OPPORTUNITIES' | 'MISC'
 	message: string
 	readStatus: boolean
 	action?: string
