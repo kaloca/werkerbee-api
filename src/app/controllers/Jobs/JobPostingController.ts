@@ -75,6 +75,15 @@ const deleteJobPosting = async (req: Request, res: Response) => {
 
 const getJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
+	const workerId = req.user?.userId
+	const { worker } = req.query
+
+	let jobApplication, alreadyApplied
+
+	if (worker) {
+		jobApplication = await JobApplicationModel.find({ worker: workerId })
+		alreadyApplied = jobApplication.length >= 1
+	}
 
 	try {
 		const jobPosting = await JobPostingModel.findById(id).populate({
@@ -88,6 +97,7 @@ const getJobPosting = async (req: Request, res: Response) => {
 
 		res.status(200).json({
 			jobPosting,
+			alreadyApplied,
 		})
 	} catch (error) {
 		res.status(500).json({ error: (error as Error).message })
