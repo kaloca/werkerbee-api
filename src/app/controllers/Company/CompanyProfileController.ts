@@ -95,7 +95,10 @@ const getCompanyJobPosts = async (req: Request, res: Response) => {
 
 		const jobPostings: IJobPosting[] | null = await JobPostingModel.find({
 			company: companyId,
-		}).select('+applications')
+			start: { $gte: new Date() },
+		})
+			.select('+applications')
+			.sort({ createdAt: -1 })
 
 		if (!jobPostings) {
 			return res.status(404).json({ message: 'No job postings.' })
