@@ -119,13 +119,14 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	const requesterDistance =
 		parseFloat(req.query.requesterDistance as string) || 10
 	const sortField = req.query.sortBy as string // This is the field to sort by
-	const sortOrder = parseInt(req.query.order as string) || -1 // This is the order to sort in. 1 for ascending, -1 for descending.
+	const sortOrder = parseInt(req.query.order as string) || 1 // This is the order to sort in. 1 for ascending, -1 for descending.
 	// Build match stage
 	const matchStage: any = {}
 	if (dayOfWeek.length > 0 && dayOfWeek[0] != undefined)
 		matchStage.dayOfWeek = { $in: dayOfWeek }
 	if (minPay) matchStage.payment = { $gte: minPay }
 	if (jobType) matchStage.type = { $in: jobType }
+	matchStage.start = { $gte: new Date() }
 
 	const geoNearStage =
 		requesterLocation && requesterDistance
