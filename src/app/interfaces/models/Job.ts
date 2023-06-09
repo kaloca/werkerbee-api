@@ -1,5 +1,15 @@
 import { Document } from 'mongoose'
 
+export type TimelineEventType =
+	| 'CLOCK_IN'
+	| 'CLOCK_OUT'
+	| 'BREAK_START'
+	| 'BREAK_END'
+
+export interface ITimelineEvent {
+	status: TimelineEventType
+	time: Date
+}
 export interface IJob extends Document {
 	name: string
 	rating?: number
@@ -18,6 +28,7 @@ export interface IJob extends Document {
 			_id?: string
 		}
 	]
+	timeline: ITimelineEvent[]
 	createdAt: Date
 	updatedAt: Date
 }

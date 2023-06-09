@@ -13,6 +13,23 @@ const BreakSchema = new Schema({
 	},
 })
 
+const EventSchema = new Schema(
+	{
+		status: {
+			type: String,
+			required: true,
+			enum: ['CLOCK_IN', 'CLOCK_OUT', 'BREAK_START', 'BREAK_END'],
+		},
+		time: {
+			type: Date,
+			required: true,
+		},
+	},
+	{
+		_id: false, // We don't need a unique _id for each event in this case
+	}
+)
+
 const JobSchema = new Schema(
 	{
 		name: {
@@ -58,6 +75,10 @@ const JobSchema = new Schema(
 		},
 		breaks: {
 			type: [BreakSchema],
+			required: false,
+		},
+		timeline: {
+			type: [EventSchema],
 			required: false,
 		},
 	},
