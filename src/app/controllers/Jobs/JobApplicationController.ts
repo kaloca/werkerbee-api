@@ -170,6 +170,31 @@ export const confirmJob = async (req: Request, res: Response) => {
 			return res.status(500).json({ message: 'Something went wrong (102)' })
 		}
 
+		const overlappingJob = await JobModel.findOne({
+			workerId: workerId,
+			$or: [
+				{
+					// Job starts during another job
+					shiftStart: { $lt: jobPosting.end, $gte: jobPosting.start },
+				},
+				{
+					// Job ends during another job
+					shiftEnd: { $lte: jobPosting.end, $gt: jobPosting.start },
+				},
+			],
+		})
+
+		if (overlappingJob) {
+			return res
+				.status(400)
+				.json({ message: 'You already have a scheduled job at this time.' })
+		}
+
+		// Check 2: The job start time is not in the past.
+		if (new Date(jobPosting.start) < new Date()) {
+			return res.status(400).json({ message: 'This job has already expired.' })
+		}
+
 		jobApplication.status = 'SCHEDULED'
 		await jobApplication.save()
 
