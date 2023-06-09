@@ -51,6 +51,13 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 const getApplications = async (req: Request, res: Response) => {
 	const username = req.params.username
 	const workerId = req.user?.userId
+	const { status, page, limit } = req.query
+
+	console.log(req.query)
+
+	const pageAsNumber = Number(page) || 1
+	const limitAsNumber = Number(limit) || 10
+
 	try {
 		const worker = await WorkerModel.findOne({ username })
 
@@ -62,12 +69,34 @@ const getApplications = async (req: Request, res: Response) => {
 			return res.status(403).json({ message: 'Unauthorized' })
 		}
 
-		const applications: IJobApplication[] | null =
-			await JobApplicationModel.find({
-				worker: workerId,
-			}).populate('jobPosting company')
+		const query: any = {
+			worker: workerId,
+		}
 
-		res.status(200).json(applications)
+		if (status) {
+			query.status = status
+		}
+
+		const applications: IJobApplication[] = await JobApplicationModel.find(
+			query
+		)
+			.populate('jobPosting company')
+			.sort({ createdAt: -1 })
+			.skip((pageAsNumber - 1) * limitAsNumber)
+			.limit(limitAsNumber)
+
+		const totalApplications = await JobApplicationModel.countDocuments(query)
+
+		const totalPage = Math.ceil(totalApplications / limitAsNumber)
+
+		res.status(200).json({
+			applications,
+			pagination: {
+				currentPage: pageAsNumber,
+				totalPage,
+				totalApplications,
+			},
+		})
 	} catch (error) {
 		res.status(500).json({ message: 'Server error' })
 	}
