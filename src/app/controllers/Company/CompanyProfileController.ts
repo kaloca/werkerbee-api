@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 
 import { ICompany } from '@/app/interfaces/models/Company'
 import { IJobPosting } from '@/app/interfaces/models/JobPosting'
@@ -93,18 +94,49 @@ const getCompanyJobPosts = async (req: Request, res: Response) => {
 
 		const companyId = company.id
 
-		const jobPostings: IJobPosting[] | null = await JobPostingModel.find({
-			company: companyId,
-			start: { $gte: new Date() },
-		})
-			.select('+applications')
-			.sort({ createdAt: -1 })
+		const jobPostingsWithJobs = await JobPostingModel.aggregate([
+			{
+				$match: {
+					company: new mongoose.Types.ObjectId(companyId),
+					$or: [{ start: { $gte: new Date() } }, { end: { $gte: new Date() } }],
+				},
+			},
+			{
+				$lookup: {
+					from: 'jobs',
+					localField: '_id',
+					foreignField: 'jobPostingId',
+					as: 'job',
+				},
+			},
+			{
+				$unwind: {
+					path: '$job',
+					preserveNullAndEmptyArrays: true,
+				},
+			},
+			{
+				$project: {
+					...Object.fromEntries(
+						Object.keys(JobPostingModel.schema.paths).map((path) => [path, 1])
+					), // include all fields from JobPosting
+					'job._id': 1,
+					'job.status': 1,
+				},
+			},
+			{
+				$addFields: { applications: '$applications' },
+			},
+			{
+				$sort: { createdAt: -1 },
+			},
+		])
 
-		if (!jobPostings) {
+		if (!jobPostingsWithJobs) {
 			return res.status(404).json({ message: 'No job postings.' })
 		}
 
-		return res.status(200).json(jobPostings)
+		return res.status(200).json(jobPostingsWithJobs)
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(500)
