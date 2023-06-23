@@ -81,7 +81,10 @@ const getJobPosting = async (req: Request, res: Response) => {
 	let jobApplication, alreadyApplied
 
 	if (worker) {
-		jobApplication = await JobApplicationModel.find({ worker: workerId })
+		jobApplication = await JobApplicationModel.find({
+			worker: workerId,
+			jobPosting: id,
+		})
 		alreadyApplied = jobApplication.length >= 1
 	}
 
