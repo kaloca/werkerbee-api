@@ -37,11 +37,29 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
-		const { name, location, rating, jobTypes, experiences, address } = worker
+		const completedJobs: IJob[] | null = await JobModel.find({
+			workerId: worker.id,
+			status: 'COMPLETE',
+		})
 
-		return res
-			.status(200)
-			.json({ name, location, rating, jobTypes, experiences, address })
+		const {
+			name,
+			rating,
+			jobTypes,
+			experiences,
+			profilePicture,
+			certifications,
+		} = worker
+
+		return res.status(200).json({
+			name,
+			rating,
+			jobTypes,
+			experiences,
+			profilePicture,
+			certifications,
+			completedJobs: completedJobs.length,
+		})
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)

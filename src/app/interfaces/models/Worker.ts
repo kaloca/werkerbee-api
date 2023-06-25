@@ -2,7 +2,7 @@ import { Document, Schema } from 'mongoose'
 
 import { Address } from '../Address'
 import { BankAccount } from '../BankAccount'
-import { IJobApplication } from './JobApplication'
+import { ICertification } from './Certification'
 
 interface Experience extends Document {
 	company: string
@@ -28,6 +28,7 @@ export interface IWorker extends Document {
 	rating: number
 	jobTypes: string[]
 	experiences?: Experience[]
+	certifications?: ICertification[]
 	profilePicture: string
 	hashedPassword: string
 }

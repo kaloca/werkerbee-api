@@ -4,6 +4,7 @@ import { IWorker } from '../interfaces/models/Worker'
 import addressSchema from './schemas/addressSchema'
 import bankAccountSchema from './schemas/bankAccountSchema'
 import pointSchema from './schemas/pointSchema'
+import { CertificationSchema } from './CertificationModel'
 
 const experienceSchema: Schema = new Schema({
 	company: { type: String, required: true },
@@ -32,6 +33,7 @@ const workerSchema: Schema = new Schema(
 		rating: { type: Number, default: null },
 		jobTypes: { type: [String], required: true },
 		experiences: { type: [experienceSchema], required: false },
+		certifications: { type: [CertificationSchema], required: false },
 		profilePicture: {
 			type: String,
 		},

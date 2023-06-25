@@ -9,6 +9,7 @@ import WorkerController from './Worker/WorkerController'
 import WorkerEditController from './Worker/WorkerEditController'
 import NotificationsController from './Notifications/NotificationsController'
 import ImageController from './Image/ImageController'
+import CertificationController from './Certification/WorkerCertificationController'
 
 const controllers = {
 	LoginController,
@@ -20,6 +21,7 @@ const controllers = {
 	JobController,
 	WorkerController,
 	WorkerEditController,
+	CertificationController,
 	NotificationsController,
 	ImageController,
 }
