@@ -13,8 +13,15 @@ ImageRouter.post(
 	controllers.ImageController.uploadImage
 )
 
-ImageRouter.get(
-	'/image',
+ImageRouter.post(
+	'/profile-picture',
+	requireAuth,
+	upload.single('image'),
+	controllers.ImageController.updateProfilePicture
+)
+
+ImageRouter.post(
+	'/profile-picture',
 	requireAuth,
 	controllers.NotificationsController.getNotifications
 )
