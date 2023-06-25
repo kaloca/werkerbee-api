@@ -28,5 +28,6 @@ export interface IWorker extends Document {
 	rating: number
 	jobTypes: string[]
 	experiences?: Experience[]
+	profilePicture: string
 	hashedPassword: string
 }

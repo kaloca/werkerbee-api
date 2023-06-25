@@ -58,6 +58,9 @@ const CompanySchema = new Schema(
 			required: false,
 			select: false,
 		},
+		profilePicture: {
+			type: String,
+		},
 		hashedPassword: {
 			type: String,
 			required: true,

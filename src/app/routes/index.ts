@@ -8,6 +8,7 @@ import JobPostingRouter from './Jobs/JobPostingRouter'
 import WorkerRouter from './Worker/WorkerRouter'
 import JobRouter from './Jobs/JobRouter'
 import NotificationRouter from './Notification/NotificationRouter'
+import ImageRouter from './Image/ImageRouter'
 
 const routes = Router()
 
@@ -19,6 +20,7 @@ routes.use(JobPostingRouter)
 routes.use(WorkerRouter)
 routes.use(JobRouter)
 routes.use(NotificationRouter)
+routes.use(ImageRouter)
 
 // Health Check
 routes.get('/', (req, res) =>

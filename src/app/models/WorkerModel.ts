@@ -32,6 +32,9 @@ const workerSchema: Schema = new Schema(
 		rating: { type: Number, default: null },
 		jobTypes: { type: [String], required: true },
 		experiences: { type: [experienceSchema], required: false },
+		profilePicture: {
+			type: String,
+		},
 		hashedPassword: { type: String, required: true, select: false },
 		// documents: { type: Buffer, required: true },
 	},

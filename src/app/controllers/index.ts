@@ -8,6 +8,7 @@ import JobController from './Jobs/JobController'
 import WorkerController from './Worker/WorkerController'
 import WorkerEditController from './Worker/WorkerEditController'
 import NotificationsController from './Notifications/NotificationsController'
+import ImageController from './Image/ImageController'
 
 const controllers = {
 	LoginController,
@@ -20,6 +21,7 @@ const controllers = {
 	WorkerController,
 	WorkerEditController,
 	NotificationsController,
+	ImageController,
 }
 
 export default controllers

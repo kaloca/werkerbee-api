@@ -17,6 +17,7 @@ export interface ICompany extends Document {
 	hashedPassword: string
 	address: Address
 	bankInfo: BankAccount
+	profilePicture: string
 	createdAt: Date
 	updatedAt: Date
 }
