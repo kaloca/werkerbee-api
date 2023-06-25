@@ -1,0 +1,21 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = exports.CertificationSchema = void 0;
+var _mongoose = require("mongoose");
+var CertificationSchema = new _mongoose.Schema({
+  certification: {
+    type: String,
+    required: true
+  },
+  organization: {
+    type: String,
+    required: true
+  }
+});
+exports.CertificationSchema = CertificationSchema;
+var _default = (0, _mongoose.model)('Certification', CertificationSchema);
+exports["default"] = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJfbW9uZ29vc2UiLCJyZXF1aXJlIiwiQ2VydGlmaWNhdGlvblNjaGVtYSIsIlNjaGVtYSIsImNlcnRpZmljYXRpb24iLCJ0eXBlIiwiU3RyaW5nIiwicmVxdWlyZWQiLCJvcmdhbml6YXRpb24iLCJleHBvcnRzIiwiX2RlZmF1bHQiLCJtb2RlbCJdLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9hcHAvbW9kZWxzL0NlcnRpZmljYXRpb25Nb2RlbC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBTY2hlbWEsIG1vZGVsIH0gZnJvbSAnbW9uZ29vc2UnXG5cbmltcG9ydCB7IElDZXJ0aWZpY2F0aW9uIH0gZnJvbSAnLi4vaW50ZXJmYWNlcy9tb2RlbHMvQ2VydGlmaWNhdGlvbidcblxuZXhwb3J0IGNvbnN0IENlcnRpZmljYXRpb25TY2hlbWE6IFNjaGVtYSA9IG5ldyBTY2hlbWEoe1xuXHRjZXJ0aWZpY2F0aW9uOiB7IHR5cGU6IFN0cmluZywgcmVxdWlyZWQ6IHRydWUgfSxcblx0b3JnYW5pemF0aW9uOiB7IHR5cGU6IFN0cmluZywgcmVxdWlyZWQ6IHRydWUgfSxcbn0pXG5cbmV4cG9ydCBkZWZhdWx0IG1vZGVsPElDZXJ0aWZpY2F0aW9uPignQ2VydGlmaWNhdGlvbicsIENlcnRpZmljYXRpb25TY2hlbWEpXG4iXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBLElBQUFBLFNBQUEsR0FBQUMsT0FBQTtBQUlPLElBQU1DLG1CQUEyQixHQUFHLElBQUlDLGdCQUFNLENBQUM7RUFDckRDLGFBQWEsRUFBRTtJQUFFQyxJQUFJLEVBQUVDLE1BQU07SUFBRUMsUUFBUSxFQUFFO0VBQUssQ0FBQztFQUMvQ0MsWUFBWSxFQUFFO0lBQUVILElBQUksRUFBRUMsTUFBTTtJQUFFQyxRQUFRLEVBQUU7RUFBSztBQUM5QyxDQUFDLENBQUM7QUFBQUUsT0FBQSxDQUFBUCxtQkFBQSxHQUFBQSxtQkFBQTtBQUFBLElBQUFRLFFBQUEsR0FFYSxJQUFBQyxlQUFLLEVBQWlCLGVBQWUsRUFBRVQsbUJBQW1CLENBQUM7QUFBQU8sT0FBQSxjQUFBQyxRQUFBIn0=
