@@ -29,4 +29,10 @@ WorkerRouter.get(
 	requireAuth,
 	controllers.WorkerController.getJobsCalendar
 )
+WorkerRouter.get(
+	'/worker/nav/status',
+	requireAuth,
+	controllers.WorkerController.getStatus
+)
+
 export default WorkerRouter

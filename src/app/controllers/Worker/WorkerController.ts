@@ -7,6 +7,8 @@ import JobModel from '@/app/models/JobModel'
 import { IJob } from '@/app/interfaces/models/Job'
 import { IJobApplication } from '@/app/interfaces/models/JobApplication'
 import JobApplicationModel from '@/app/models/JobApplicationModel'
+import NotificationModel from '@/app/models/NotificationModel'
+import { INotification } from '@/app/interfaces/models/Notification'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -198,12 +200,44 @@ const getJobsCalendar = async (req: Request, res: Response) => {
 	return res.status(200).json(days)
 }
 
+const getStatus = async (req: Request, res: Response) => {
+	console.log('he')
+	try {
+		const workerId = req.user?.userId
+		console.log(workerId)
+
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
+
+		if (!worker) {
+			return res.status(404).json({ message: 'Worker not  sfound.' })
+		}
+
+		const unreadNotification: INotification | null =
+			await NotificationModel.findOne({
+				readStatus: false,
+				user: {
+					id: workerId,
+					type: 'worker',
+				},
+			})
+
+		return res.status(200).json({
+			unreadNotification: unreadNotification && true,
+			profilePicture: worker.profilePicture,
+		})
+	} catch (error) {
+		console.log(error)
+		return res.sendStatus(400)
+	}
+}
+
 const WorkerController = {
 	getWorkerProfile,
 	getWorkerPublicProfile,
 	getApplications,
 	getJobs,
 	getJobsCalendar,
+	getStatus,
 }
 
 export default WorkerController
