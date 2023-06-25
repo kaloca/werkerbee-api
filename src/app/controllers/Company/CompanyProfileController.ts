@@ -6,6 +6,8 @@ import { IJobPosting } from '@/app/interfaces/models/JobPosting'
 
 import CompanyModel from '@/app/models/CompanyModel'
 import JobPostingModel from '@/app/models/JobPostingModel'
+import NotificationModel from '@/app/models/NotificationModel'
+import { INotification } from '@/app/interfaces/models/Notification'
 
 const getCompanyProfile = async (req: Request, res: Response) => {
 	try {
@@ -143,11 +145,42 @@ const getCompanyJobPosts = async (req: Request, res: Response) => {
 	}
 }
 
+const getStatus = async (req: Request, res: Response) => {
+	try {
+		const companyId = req.user?.userId
+		console.log(companyId)
+
+		const company: ICompany | null = await CompanyModel.findById(companyId)
+
+		if (!company) {
+			return res.status(404).json({ message: 'Company not found.' })
+		}
+
+		const unreadNotification: INotification | null =
+			await NotificationModel.findOne({
+				user: {
+					id: companyId,
+					type: 'company',
+				},
+				readStatus: false,
+			})
+
+		return res.status(200).json({
+			unreadNotification: unreadNotification ? true : false,
+			profilePicture: company.profilePicture,
+		})
+	} catch (error) {
+		console.log(error)
+		return res.sendStatus(400)
+	}
+}
+
 const CompanyProfileController = {
 	getCompanyProfile,
 	getCompanyPublicProfile,
 	editCompanyProfile,
 	getCompanyJobPosts,
+	getStatus,
 }
 
 export default CompanyProfileController
