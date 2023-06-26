@@ -13,6 +13,7 @@ const JobPostingSchema = new Schema(
 			type: pointSchema,
 			required: true,
 		},
+		filled: { type: Boolean, default: false },
 		dressCode: { type: String, required: true },
 		requiredSkills: { type: String, required: true },
 		requiredCertifications: { type: String, required: true },
