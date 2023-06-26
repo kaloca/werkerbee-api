@@ -33,7 +33,9 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 	try {
 		const username = req.params.username
 
-		const worker: IWorker | null = await WorkerModel.findOne({ username })
+		const worker: IWorker | null = await WorkerModel.findOne({
+			username,
+		}).select('+address')
 
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -51,6 +53,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			experiences,
 			profilePicture,
 			certifications,
+			address,
 		} = worker
 
 		return res.status(200).json({
@@ -61,6 +64,10 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			profilePicture,
 			certifications,
 			completedJobs: completedJobs.length,
+			address: {
+				city: address.city,
+				country: address.country,
+			},
 		})
 	} catch (error) {
 		console.log(error)
