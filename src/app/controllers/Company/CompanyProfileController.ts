@@ -36,11 +36,25 @@ const getCompanyPublicProfile = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: 'Company not found.' })
 		}
 
-		const { name, location, overallRating, type, jobTypes } = company
+		const now = new Date()
+		const activeListings: IJobPosting[] | null = await JobPostingModel.find({
+			company: company.id,
+			filled: { $in: [false, null] },
+			start: { $gt: now },
+		})
 
-		return res
-			.status(200)
-			.json({ name, location, overallRating, type, jobTypes })
+		const { name, location, overallRating, type, jobTypes, profilePicture } =
+			company
+
+		return res.status(200).json({
+			name,
+			location,
+			overallRating,
+			type,
+			jobTypes,
+			profilePicture,
+			activeListings: activeListings.length,
+		})
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(500)
