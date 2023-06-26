@@ -19,7 +19,6 @@ const addAddress = async (req: Request, res: Response) => {
 		await worker.save()
 		return res.status(200).send()
 	} catch (error) {
-		console.log(error)
 		return res.sendStatus(400)
 	}
 }
@@ -57,6 +56,9 @@ const addExperience = async (req: Request, res: Response) => {
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
+		if (worker.username != req.params.username) {
+			return res.status(400).json({ message: 'Bad request.' })
+		}
 
 		if (!worker.experiences) {
 			worker.experiences = []
@@ -66,10 +68,39 @@ const addExperience = async (req: Request, res: Response) => {
 		await worker.save()
 		res.status(200).json({ message: 'Experience added successfully.' })
 	} catch (error) {
+		console.log(error)
 		res.status(500).json({
 			message: 'An error occurred while adding the experience.',
 			error,
 		})
+	}
+}
+
+const editExperience = async (req: Request, res: Response) => {
+	try {
+		const { username, experienceId } = req.params
+		const { jobType, company, startDate, endDate } = req.body // New values to be updated
+
+		const updatedWorker = await WorkerModel.findOneAndUpdate(
+			{ username: username, 'experiences._id': experienceId },
+			{
+				$set: {
+					'experiences.$.jobType': jobType,
+					'experiences.$.company': company,
+					'experiences.$.startDate': startDate,
+					'experiences.$.endDate': endDate,
+				},
+			},
+			{ new: true } // This option returns the updated document
+		)
+
+		if (!updatedWorker) {
+			return res.status(404).json({ message: 'Worker or experience not found' })
+		}
+
+		return res.status(200).json(updatedWorker)
+	} catch (error) {
+		return res.status(500).json({ message: error })
 	}
 }
 
@@ -144,6 +175,7 @@ const WorkerEditController = {
 	updateBankInfo,
 	addExperience,
 	deleteExperience,
+	editExperience,
 	updateProfile,
 }
 

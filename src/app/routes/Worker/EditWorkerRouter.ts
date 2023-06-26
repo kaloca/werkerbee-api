@@ -10,13 +10,18 @@ EditWorkerRouter.put(
 	requireAuth,
 	controllers.WorkerEditController.updateBankInfo
 )
-EditWorkerRouter.put(
-	'/worker/experience',
+EditWorkerRouter.post(
+	'/worker/:username/experience',
 	requireAuth,
 	controllers.WorkerEditController.addExperience
 )
+EditWorkerRouter.put(
+	'/worker/:username/experience=:experienceId',
+	requireAuth,
+	controllers.WorkerEditController.editExperience
+)
 EditWorkerRouter.delete(
-	'/worker/experience=:experienceId/delete',
+	'/worker/:username/experience=:experienceId',
 	requireAuth,
 	controllers.WorkerEditController.deleteExperience
 )
