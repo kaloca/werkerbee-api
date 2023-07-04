@@ -198,6 +198,9 @@ export const confirmJob = async (req: Request, res: Response) => {
 		jobApplication.status = 'SCHEDULED'
 		await jobApplication.save()
 
+		jobPosting.filled = true
+		await jobPosting.save()
+
 		const job: IJob = new JobModel({
 			name: jobPosting.name,
 			workerId: jobApplication.worker,
