@@ -208,10 +208,8 @@ const getJobsCalendar = async (req: Request, res: Response) => {
 }
 
 const getStatus = async (req: Request, res: Response) => {
-	console.log('he')
 	try {
 		const workerId = req.user?.userId
-		console.log(workerId)
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
 
