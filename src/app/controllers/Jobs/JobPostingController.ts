@@ -121,10 +121,15 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 	const requesterLocation = req.query.requesterLocation as string
 	const requesterDistance =
 		parseFloat(req.query.requesterDistance as string) || 10
+	const companyType = req.query.companyType as string
+	const companyUsername = req.query.companyUsername as string
 	const sortField = req.query.sortBy as string // This is the field to sort by
 	const sortOrder = parseInt(req.query.order as string) || 1 // This is the order to sort in. 1 for ascending, -1 for descending.
 	// Build match stage
 	const matchStage: any = {}
+	matchStage.filled = {
+		$in: [false, undefined],
+	}
 	if (dayOfWeek.length > 0 && dayOfWeek[0] != undefined)
 		matchStage.dayOfWeek = { $in: dayOfWeek }
 	if (minPay) matchStage.payment = { $gte: minPay }
@@ -173,6 +178,16 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 					: undefined, // Convert 'distance' from meters to miles
 			},
 		},
+		(false && companyType) || companyUsername
+			? {
+					$match: {
+						...(companyType && {
+							'company.type': { $regex: new RegExp(`^${companyType}$`, 'i') },
+						}),
+						...(companyUsername && { 'company.username': companyUsername }),
+					},
+			  }
+			: null,
 		projectionStage,
 		{ $sort: { [sortField]: sortOrder } }, // Add the sort stage here
 		{ $skip: (page - 1) * limit },
