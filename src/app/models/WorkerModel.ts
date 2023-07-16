@@ -28,7 +28,7 @@ const workerSchema: Schema = new Schema(
 		address: { type: addressSchema, required: true, select: false },
 		billingAddress: { type: addressSchema, required: false, select: false },
 		bankInfo: { type: bankAccountSchema, required: false, select: false },
-		ssn: { type: String, required: true, unique: true, select: false },
+		ssn: { type: String, required: false, unique: true, select: false },
 		birthday: { type: Date, required: true },
 		rating: { type: Number, default: null },
 		jobTypes: { type: [String], required: true },

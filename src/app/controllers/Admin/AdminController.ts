@@ -33,6 +33,83 @@ const getWorkers = async (req: Request, res: Response) => {
 	}
 }
 
+const getWorker = async (req: Request, res: Response) => {
+	try {
+		const username = req.params.username
+
+		const worker: IWorker | null = await WorkerModel.findOne({
+			username,
+		}).select('+address')
+
+		if (!worker) {
+			return res.status(404).json({ message: 'Worker not found.' })
+		}
+
+		res.status(200).json({
+			worker,
+		})
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while fetching workers.',
+			error,
+		})
+	}
+}
+
+const updateWorker = async (req: Request, res: Response) => {
+	try {
+		const username = req.params.username
+
+		const allowedFields = ['name', 'jobTypes', 'address', 'status']
+
+		const updateData: any = {}
+
+		allowedFields.forEach((field) => {
+			if (req.body[field] !== undefined) {
+				updateData[field] = req.body[field]
+			}
+		})
+
+		if (Object.keys(updateData).length === 0) {
+			return res.status(400).json({ message: 'No valid fields to update.' })
+		}
+
+		const updatedWorker = await WorkerModel.findOneAndUpdate(
+			{ username: username },
+			{ $set: updateData },
+			{ new: true }
+		)
+
+		res.status(200).json({ message: 'Worker profile updated successfully.' })
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while fetching workers.',
+			error,
+		})
+	}
+}
+
+const updateWorkerAccountStatus = async (req: Request, res: Response) => {
+	try {
+		const username = req.params.username
+
+		const updatedWorker = await WorkerModel.findOneAndUpdate(
+			{ username: username },
+			{ accountStatus: req.body.status },
+			{ new: true }
+		)
+
+		res
+			.status(200)
+			.json({ message: 'Worker account status updated successfully.' })
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while updating account status.',
+			error,
+		})
+	}
+}
+
 // const getWorkers = async () => {
 // 	const query = {} // Match all documents
 // 	const update = { $set: { accountStatus: 'PENDING' } }
@@ -43,6 +120,11 @@ const getWorkers = async (req: Request, res: Response) => {
 // 		.catch((error) => console.error(`Error in updating documents: ${error}`))
 // }
 
-const AdminController = { getWorkers }
+const AdminController = {
+	getWorkers,
+	getWorker,
+	updateWorker,
+	updateWorkerAccountStatus,
+}
 
 export default AdminController
