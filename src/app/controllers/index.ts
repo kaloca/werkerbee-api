@@ -10,6 +10,7 @@ import WorkerEditController from './Worker/WorkerEditController'
 import NotificationsController from './Notifications/NotificationsController'
 import ImageController from './Image/ImageController'
 import CertificationController from './Certification/WorkerCertificationController'
+import AdminController from './Admin/AdminController'
 
 const controllers = {
 	LoginController,
@@ -24,6 +25,7 @@ const controllers = {
 	CertificationController,
 	NotificationsController,
 	ImageController,
+	AdminController,
 }
 
 export default controllers

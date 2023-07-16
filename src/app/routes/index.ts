@@ -10,6 +10,7 @@ import JobRouter from './Jobs/JobRouter'
 import NotificationRouter from './Notification/NotificationRouter'
 import ImageRouter from './Image/ImageRouter'
 import CertificationRouter from './Certification/CertificationRouter'
+import AdminRouter from './Admin/AdminRouter'
 
 const routes = Router()
 
@@ -23,6 +24,7 @@ routes.use(JobRouter)
 routes.use(NotificationRouter)
 routes.use(ImageRouter)
 routes.use(CertificationRouter)
+routes.use(AdminRouter)
 
 // Health Check
 routes.get('/', (req, res) =>
