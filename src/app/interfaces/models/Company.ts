@@ -18,6 +18,7 @@ export interface ICompany extends Document {
 	address: Address
 	bankInfo: BankAccount
 	profilePicture: string
+	accountStatus: 'APPROVED' | 'PENDING' | 'REJECTED'
 	createdAt: Date
 	updatedAt: Date
 }

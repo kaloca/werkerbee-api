@@ -37,6 +37,14 @@ const login = async (req: Request, res: Response) => {
 
 		if (!isCorrectPassword) return res.status(400).send('incorrect password')
 
+		if (user.accountStatus == 'PENDING') {
+			return res.status(403).json({ message: 'user account pending approval' })
+		}
+
+		if (user.accountStatus == 'REJECTED') {
+			return res.status(403).json({ message: 'user account rejected' })
+		}
+
 		const base64AuthSecret = AUTH_SECRET as string
 		const authSecret = Buffer.from(base64AuthSecret, 'base64').toString('utf8')
 		const token = await jwt.sign({ userId: user._id }, authSecret, {

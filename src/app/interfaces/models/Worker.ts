@@ -30,5 +30,6 @@ export interface IWorker extends Document {
 	experiences?: Experience[]
 	certifications?: ICertification[]
 	profilePicture: string
+	accountStatus: 'APPROVED' | 'PENDING' | 'REJECTED'
 	hashedPassword: string
 }

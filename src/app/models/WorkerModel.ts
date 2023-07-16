@@ -37,6 +37,12 @@ const workerSchema: Schema = new Schema(
 		profilePicture: {
 			type: String,
 		},
+		accountStatus: {
+			type: String,
+			enum: ['APPROVED', 'PENDING', 'REJECTED'],
+			required: false,
+			default: 'PENDING',
+		},
 		hashedPassword: { type: String, required: true, select: false },
 		// documents: { type: Buffer, required: true },
 	},
