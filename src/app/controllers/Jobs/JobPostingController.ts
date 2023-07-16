@@ -91,7 +91,7 @@ const getJobPosting = async (req: Request, res: Response) => {
 	try {
 		const jobPosting = await JobPostingModel.findById(id).populate({
 			path: 'company',
-			select: '-email -createdAt -updatedAt -username',
+			select: '-createdAt -updatedAt',
 		})
 
 		if (!jobPosting) {
