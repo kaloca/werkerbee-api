@@ -173,6 +173,7 @@ const getAllJobPostings = async (req: Request, res: Response) => {
 		{
 			$addFields: {
 				companyName: '$company.name',
+				companyUsername: '$company.username',
 				distanceInMiles: geoNearStage
 					? { $divide: ['$distance', 1609.34] }
 					: undefined, // Convert 'distance' from meters to miles
