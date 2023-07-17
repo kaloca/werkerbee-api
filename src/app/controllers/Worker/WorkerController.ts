@@ -18,7 +18,7 @@ const getWorkerProfile = async (req: Request, res: Response) => {
 			'+address'
 		)
 
-		if (!worker) {
+		if (!worker || worker.accountStatus != 'APPROVED') {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
@@ -37,7 +37,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			username,
 		}).select('+address')
 
-		if (!worker) {
+		if (!worker || worker.accountStatus != 'APPROVED') {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
 
