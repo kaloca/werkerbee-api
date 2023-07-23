@@ -39,7 +39,6 @@ JobPostingRouter.get(
 )
 JobPostingRouter.get(
 	'/job-post/:id/w',
-	requireAuth,
 	controllers.JobPostingController.getJobPosting
 )
 JobPostingRouter.post(
