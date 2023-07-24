@@ -9,6 +9,8 @@ import { IJobApplication } from '@/app/interfaces/models/JobApplication'
 import JobApplicationModel from '@/app/models/JobApplicationModel'
 import NotificationModel from '@/app/models/NotificationModel'
 import { INotification } from '@/app/interfaces/models/Notification'
+import { WorkerRatingModel } from '@/app/models/Rating'
+import { IRating } from '@/app/interfaces/models/Rating'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -149,15 +151,40 @@ const getJobs = async (req: Request, res: Response) => {
 			return res.status(401).json({ message: 'Unauthorized' })
 		}
 
-		const jobs: IJob[] = await JobModel.find({ workerId }).populate(
-			'jobPostingId'
-		)
+		const jobs: IJob[] = await JobModel.find({ workerId })
+			.sort('-shiftStart')
+			.populate('jobPostingId')
+			.populate('companyId')
 
 		if (!jobs) {
 			return res.status(404).json({ message: "Worker doesn't have any jobs" })
 		}
 
-		res.status(200).json(jobs)
+		const jobIds = jobs.map((job) => job._id)
+
+		const workerRatings: IRating[] = await WorkerRatingModel.find({
+			jobId: { $in: jobIds },
+		}).exec()
+
+		console.log(workerRatings)
+
+		const workerRatingMap = workerRatings.reduce(
+			(map, rating) => map.set(rating.jobId.toString(), rating),
+			new Map()
+		)
+
+		console.log(workerRatingMap)
+
+		const jobsWithRatings = jobs.map((job) => {
+			const jobObj = job.toObject()
+			if (workerRatingMap.has(job._id.toString())) {
+				console.log('hwl')
+				jobObj.workerRating = workerRatingMap.get(job._id.toString())
+			}
+			return jobObj
+		})
+
+		res.status(200).json(jobsWithRatings)
 	} catch (error) {
 		res.status(500).json({ message: 'Server error' })
 	}

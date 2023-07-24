@@ -29,6 +29,7 @@ export interface IJob extends Document {
 		}
 	]
 	timeline: ITimelineEvent[]
+	workerRating?: number
 	createdAt: Date
 	updatedAt: Date
 }

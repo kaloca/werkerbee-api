@@ -11,6 +11,7 @@ import NotificationRouter from './Notification/NotificationRouter'
 import ImageRouter from './Image/ImageRouter'
 import CertificationRouter from './Certification/CertificationRouter'
 import AdminRouter from './Admin/AdminRouter'
+import RatingRouter from './Rating/RatingRouter'
 
 const routes = Router()
 
@@ -25,6 +26,7 @@ routes.use(NotificationRouter)
 routes.use(ImageRouter)
 routes.use(CertificationRouter)
 routes.use(AdminRouter)
+routes.use(RatingRouter)
 
 // Health Check
 routes.get('/', (req, res) =>

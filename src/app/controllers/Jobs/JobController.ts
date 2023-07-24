@@ -86,6 +86,7 @@ const clockOut = async (req: Request, res: Response) => {
 
 		job.clockEnd = new Date()
 		job.timeline.push(createEvent('CLOCK_OUT'))
+		job.status = 'COMPLETE'
 
 		await job.save()
 
