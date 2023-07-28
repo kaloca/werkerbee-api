@@ -74,21 +74,21 @@ const deleteJobPosting = async (req: Request, res: Response) => {
 }
 
 const getJobPosting = async (req: Request, res: Response) => {
-	const { id } = req.params
-	const workerId = req.user?.userId
-	const { worker } = req.query
-
-	let jobApplication, alreadyApplied
-
-	if (worker) {
-		jobApplication = await JobApplicationModel.find({
-			worker: workerId,
-			jobPosting: id,
-		})
-		alreadyApplied = jobApplication.length >= 1
-	}
-
 	try {
+		const { id } = req.params
+		const workerId = req.user?.userId
+		const { worker } = req.query
+
+		let jobApplication, alreadyApplied
+
+		if (worker) {
+			jobApplication = await JobApplicationModel.find({
+				worker: workerId,
+				jobPosting: id,
+			})
+			alreadyApplied = jobApplication.length >= 1
+		}
+
 		const jobPosting = await JobPostingModel.findById(id).populate({
 			path: 'company',
 			select: '-createdAt -updatedAt',
