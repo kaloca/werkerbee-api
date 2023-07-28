@@ -12,7 +12,7 @@ import { INotification } from '@/app/interfaces/models/Notification'
 const getCompanyProfile = async (req: Request, res: Response) => {
 	try {
 		const companyId = req.user?.userId
-		console.log('hey')
+
 		const company: ICompany | null = await CompanyModel.findById(companyId)
 
 		if (!company) {

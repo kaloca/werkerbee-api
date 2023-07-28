@@ -6,7 +6,6 @@ import CompanyModel from '@/app/models/CompanyModel'
 import WorkerModel from '@/app/models/WorkerModel'
 
 const createNotification = async (req: Request, res: Response) => {
-	console.log('im here')
 	const newNotification = new NotificationModel({
 		...req.body,
 	})

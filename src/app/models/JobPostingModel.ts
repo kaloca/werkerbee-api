@@ -62,7 +62,6 @@ JobPostingSchema.pre('save', function (next) {
 		'Friday',
 		'Saturday',
 	]
-	console.log('hello')
 	this.dayOfWeek = days[this.start.getDay()]
 	next()
 })

@@ -12,7 +12,6 @@ import { IJobApplication } from '@/app/interfaces/models/JobApplication'
 
 const applyForJob = async (req: Request, res: Response) => {
 	try {
-		console.log('heer')
 		const jobPostingId = req.params.id
 		const workerId = req.user?.userId || 'id'
 
@@ -25,7 +24,7 @@ const applyForJob = async (req: Request, res: Response) => {
 		}
 
 		const worker: IWorker | null = await WorkerModel.findById(workerId)
-		console.log(worker?.name)
+
 		if (!worker) {
 			return res.status(404).json({ message: 'Worker not found.' })
 		}
@@ -41,7 +40,7 @@ const applyForJob = async (req: Request, res: Response) => {
 				.status(400)
 				.json({ message: 'You have already applied for this job' })
 		}
-		console.log('nowhere')
+
 		// Create a new job application instance
 		const jobApplication = new JobApplicationModel({
 			worker: workerId,

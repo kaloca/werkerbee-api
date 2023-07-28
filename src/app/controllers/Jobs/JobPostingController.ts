@@ -34,7 +34,7 @@ const createJobPosting = async (req: Request, res: Response) => {
 const updateJobPosting = async (req: Request, res: Response) => {
 	const { id } = req.params
 	const companyId = req.user?.userId
-	console.log(req.params, req.user)
+
 	try {
 		const updatedJobPosting = await JobPostingModel.findOneAndUpdate(
 			{ _id: id, company: companyId },
@@ -108,7 +108,6 @@ const getJobPosting = async (req: Request, res: Response) => {
 }
 
 const getAllJobPostings = async (req: Request, res: Response) => {
-	console.log(req.query)
 	const page = parseInt(req.query.page as string) || 1
 	const limit = parseInt(req.query.limit as string) || 10
 

@@ -30,7 +30,6 @@ const createRating = async (req: Request, res: Response) => {
 }
 
 const getRatingById = async (req: Request, res: Response) => {
-	console.log('im here')
 	const newNotification = new NotificationModel({
 		...req.body,
 	})
@@ -82,7 +81,6 @@ const updateRating = async (req: Request, res: Response) => {
 }
 
 const deleteRating = async (req: Request, res: Response) => {
-	console.log('im here')
 	const newNotification = new NotificationModel({
 		...req.body,
 	})

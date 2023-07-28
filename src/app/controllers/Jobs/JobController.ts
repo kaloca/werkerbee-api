@@ -47,7 +47,7 @@ const clockIn = async (req: Request, res: Response) => {
 		const now = new Date()
 		const shiftStart = new Date(job.shiftStart)
 		const diff = (now.getTime() - shiftStart.getTime()) / 1000 / 60
-		console.log(diff)
+
 		if (diff < -30) {
 			return res.status(400).json({
 				message: 'You can only clock in within 30 minutes of shift start time',

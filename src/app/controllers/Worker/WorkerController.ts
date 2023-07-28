@@ -166,19 +166,14 @@ const getJobs = async (req: Request, res: Response) => {
 			jobId: { $in: jobIds },
 		}).exec()
 
-		console.log(workerRatings)
-
 		const workerRatingMap = workerRatings.reduce(
 			(map, rating) => map.set(rating.jobId.toString(), rating),
 			new Map()
 		)
 
-		console.log(workerRatingMap)
-
 		const jobsWithRatings = jobs.map((job) => {
 			const jobObj = job.toObject()
 			if (workerRatingMap.has(job._id.toString())) {
-				console.log('hwl')
 				jobObj.workerRating = workerRatingMap.get(job._id.toString())
 			}
 			return jobObj
