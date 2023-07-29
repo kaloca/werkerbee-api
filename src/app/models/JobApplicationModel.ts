@@ -16,6 +16,10 @@ const JobApplicationSchema = new Schema(
 			required: true,
 			enum: ['PENDING', 'ACCEPTED', 'REJECTED', 'CANCELED', 'SCHEDULED'],
 		},
+		timeAccepted: {
+			type: Date,
+			required: false
+		}
 	},
 	{
 		timestamps: true,
