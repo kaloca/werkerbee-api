@@ -28,7 +28,7 @@ const registerWorker = async (req: Request, res: Response) => {
 			birthday,
 			email,
 			location,
-			ssn,
+			// ssn,
 			jobTypes,
 			password,
 			username,
