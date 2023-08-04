@@ -82,8 +82,6 @@ const getApplications = async (req: Request, res: Response) => {
 	const workerId = req.user?.userId
 	const { status, past, page, limit } = req.query
 
-	console.log(req.query)
-
 	const pageAsNumber = Number(page) || 1
 	const limitAsNumber = Number(limit) || 10
 
