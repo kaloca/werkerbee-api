@@ -24,7 +24,7 @@ const workerSchema: Schema = new Schema(
 		bio: { type: String, required: false },
 		phoneNumber: { type: String, required: true, unique: true },
 		email: { type: String, required: true, unique: true },
-		location: { type: pointSchema, required: true },
+		location: { type: pointSchema, required: false },
 		address: { type: addressSchema, required: true, select: false },
 		billingAddress: { type: addressSchema, required: false, select: false },
 		bankInfo: { type: bankAccountSchema, required: false, select: false },
