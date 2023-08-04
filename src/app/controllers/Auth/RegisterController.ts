@@ -46,7 +46,7 @@ const registerWorker = async (req: Request, res: Response) => {
 			birthday,
 			email,
 			location,
-			ssn,
+			// ssn,
 			jobTypes,
 			hashedPassword,
 			username,
