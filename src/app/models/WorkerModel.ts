@@ -33,7 +33,13 @@ const workerSchema: Schema = new Schema(
 		rating: { type: Number, default: null },
 		jobTypes: { type: [String], required: true },
 		experiences: { type: [experienceSchema], required: false },
-		certifications: { type: [CertificationSchema], required: false },
+		certifications: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Certification',
+				select: true,
+			},
+		],
 		profilePicture: {
 			type: String,
 		},

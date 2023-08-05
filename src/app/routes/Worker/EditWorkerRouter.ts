@@ -36,6 +36,12 @@ EditWorkerRouter.put(
 	controllers.WorkerEditController.updateProfile
 )
 
+EditWorkerRouter.put(
+	'/worker/certification',
+	requireAuth,
+	controllers.WorkerController.addCertification
+)
+
 //EditWorkerRouter.post('/editworker/', requireAuth)
 
 export default EditWorkerRouter

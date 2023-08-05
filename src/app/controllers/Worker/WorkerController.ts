@@ -11,6 +11,8 @@ import NotificationModel from '@/app/models/NotificationModel'
 import { INotification } from '@/app/interfaces/models/Notification'
 import { WorkerRatingModel } from '@/app/models/Rating'
 import { IRating } from '@/app/interfaces/models/Rating'
+import { ICertification } from '@/app/interfaces/models/Certification'
+import CertificationModel from '@/app/models/CertificationModel'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -37,7 +39,9 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 
 		const worker: IWorker | null = await WorkerModel.findOne({
 			username,
-		}).select('+address')
+		})
+			.select('+address')
+			.populate('certifications')
 
 		if (!worker || worker.accountStatus != 'APPROVED') {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -69,6 +73,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			address: {
 				city: address.city,
 				country: address.country,
+				state: address.state,
 			},
 		})
 	} catch (error) {
@@ -256,6 +261,34 @@ const getStatus = async (req: Request, res: Response) => {
 	}
 }
 
+const addCertification = async (req: Request, res: Response) => {
+	try {
+		const workerId = req.user?.userId
+		const { certificationId } = req.body
+
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
+
+		if (!worker) {
+			return res.status(404).json({ message: 'Worker not found.' })
+		}
+
+		const certification: ICertification | null =
+			await CertificationModel.findById(certificationId)
+
+		if (!certification) {
+			return res.status(400).json({ message: 'Invalid Certificaton Id' })
+		}
+
+		worker.certifications?.push(certification._id)
+		await worker.save()
+
+		return res.status(200).json(certification)
+	} catch (error) {
+		console.log(error)
+		return res.sendStatus(400)
+	}
+}
+
 const WorkerController = {
 	getWorkerProfile,
 	getWorkerPublicProfile,
@@ -263,6 +296,7 @@ const WorkerController = {
 	getJobs,
 	getJobsCalendar,
 	getStatus,
+	addCertification,
 }
 
 export default WorkerController
