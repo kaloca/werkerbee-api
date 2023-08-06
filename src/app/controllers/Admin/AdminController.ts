@@ -67,7 +67,7 @@ const updateWorker = async (req: Request, res: Response) => {
 
 		const allowedFields = [
 			'name',
-			'jobTypes',
+			'jobTypesIds',
 			'address',
 			'status',
 			'certifications',

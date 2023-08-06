@@ -31,7 +31,14 @@ const workerSchema: Schema = new Schema(
 		// ssn: { type: String, required: false, unique: false, select: false },
 		birthday: { type: Date, required: true },
 		rating: { type: Number, default: null },
-		jobTypes: { type: [String], required: true },
+		jobTypes: { type: [String], required: false },
+		jobTypesIds: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'JobType',
+				required: true,
+			},
+		],
 		experiences: { type: [experienceSchema], required: false },
 		certifications: [
 			{

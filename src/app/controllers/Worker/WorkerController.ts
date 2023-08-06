@@ -18,9 +18,9 @@ const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
 		const workerId = req.user?.userId
 
-		const worker: IWorker | null = await WorkerModel.findById(workerId).select(
-			'+address'
-		)
+		const worker: IWorker | null = await WorkerModel.findById(workerId)
+			.select('+address')
+			.populate('jobTypesIds')
 
 		if (!worker || worker.accountStatus != 'APPROVED') {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -42,6 +42,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 		})
 			.select('+address')
 			.populate('certifications')
+			.populate('jobTypesIds')
 
 		if (!worker || worker.accountStatus != 'APPROVED') {
 			return res.status(404).json({ message: 'Worker not found.' })
@@ -60,6 +61,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 			profilePicture,
 			certifications,
 			address,
+			jobTypesIds,
 		} = worker
 
 		return res.status(200).json({
@@ -75,6 +77,7 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 				country: address.country,
 				state: address.state,
 			},
+			jobTypesIds,
 		})
 	} catch (error) {
 		console.log(error)

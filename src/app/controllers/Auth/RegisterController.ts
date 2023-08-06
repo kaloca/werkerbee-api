@@ -29,11 +29,13 @@ const registerWorker = async (req: Request, res: Response) => {
 			email,
 			location,
 			// ssn,
-			jobTypes,
+			jobTypesIds,
 			password,
 			username,
 			address,
+			certifications,
 		} = req.body
+
 		console.log(req.body)
 
 		if (await checkExistingEmail(email, res)) return
@@ -47,10 +49,11 @@ const registerWorker = async (req: Request, res: Response) => {
 			email,
 			location,
 			// ssn,
-			jobTypes,
+			jobTypesIds,
 			hashedPassword,
 			username,
 			address,
+			certifications,
 		})
 
 		await newWorker.save()
