@@ -7,17 +7,22 @@ const getWorkers = async (req: Request, res: Response) => {
 	try {
 		const page: number = parseInt(req.query.page as string) || 1
 		const limit: number = parseInt(req.query.limit as string) || 10
+		const searchTerm: string | undefined = req.query.search as string
 
 		// calculate the starting document index
 		const startIndex = (page - 1) * limit
 
-		const workers: IWorker[] = await WorkerModel.find()
+		const searchQuery = searchTerm
+			? { name: new RegExp(searchTerm, 'i') } // case-insensitive search
+			: {}
+
+		const workers: IWorker[] = await WorkerModel.find(searchQuery)
 			.sort({ createdAt: -1 }) // sort by createdAt in descending order
 			.skip(startIndex)
 			.limit(limit)
 			.select('+address')
 
-		const total = await WorkerModel.countDocuments()
+		const total = await WorkerModel.countDocuments(searchQuery)
 
 		res.status(200).json({
 			workers,
