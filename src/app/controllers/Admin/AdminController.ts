@@ -60,7 +60,13 @@ const updateWorker = async (req: Request, res: Response) => {
 	try {
 		const username = req.params.username
 
-		const allowedFields = ['name', 'jobTypes', 'address', 'status']
+		const allowedFields = [
+			'name',
+			'jobTypes',
+			'address',
+			'status',
+			'certifications',
+		]
 
 		const updateData: any = {}
 
