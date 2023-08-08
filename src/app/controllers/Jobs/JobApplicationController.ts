@@ -9,6 +9,7 @@ import WorkerModel from '@/app/models/WorkerModel'
 import JobApplicationModel from '@/app/models/JobApplicationModel'
 import JobModel from '@/app/models/JobModel'
 import { IJobApplication } from '@/app/interfaces/models/JobApplication'
+import NotificationService from '@/app/services/Notifications/NotificationService'
 
 const applyForJob = async (req: Request, res: Response) => {
 	try {
@@ -126,6 +127,20 @@ export const acceptApplication = async (req: Request, res: Response) => {
 
 		jobApplication.status = 'ACCEPTED'
 		await jobApplication.save()
+
+		NotificationService.createNotification({
+			data: {
+				user: {
+					id: jobApplication.worker.toString(),
+					type: 'worker',
+				},
+				type: 'JOB',
+				message: `Your application for ${jobPosting.name} was accepted! Click here to accept or decline this offer.`,
+				action: `/applications`,
+			},
+			sendSMS: true,
+			sendEmail: true,
+		})
 
 		res.status(200).json({
 			message: 'Accepted job application',
