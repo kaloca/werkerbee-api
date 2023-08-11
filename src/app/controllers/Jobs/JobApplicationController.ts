@@ -10,6 +10,7 @@ import JobApplicationModel from '@/app/models/JobApplicationModel'
 import JobModel from '@/app/models/JobModel'
 import { IJobApplication } from '@/app/interfaces/models/JobApplication'
 import NotificationService from '@/app/services/Notifications/NotificationService'
+import CompanyModel from '@/app/models/CompanyModel'
 
 const applyForJob = async (req: Request, res: Response) => {
 	try {
@@ -53,6 +54,22 @@ const applyForJob = async (req: Request, res: Response) => {
 
 		jobPosting.applications.push(jobApplication._id)
 		await jobPosting.save()
+		
+		NotificationService.createNotification({
+			data: {
+				emailSubject: `${worker.name} Sent In An Application`,
+				user: {
+					id: jobPosting.company,
+					type: 'company',
+				},
+				type: 'JOB',
+				message: `${worker.name} just applied for the job: ${jobPosting.name}. Click on this to take a look!`,
+				action: `/jobs/${jobPosting.id}`,
+				link: `https://werkerbee.com/jobs/${jobPosting.id}`,
+			},
+			sendSMS: true,
+			sendEmail: true,
+		})
 
 		res.status(200).json({ message: 'Application submitted successfully.' })
 	} catch (error) {
@@ -125,18 +142,26 @@ export const acceptApplication = async (req: Request, res: Response) => {
 			return res.status(500).json({ message: 'Something went wrong (102)' })
 		}
 
+		const company = await CompanyModel.findById(jobPosting.company)
+
+		if (!company) {
+			return res.status(500).json({ message: 'Something went wrong (102)' })
+		}
+
 		jobApplication.status = 'ACCEPTED'
 		await jobApplication.save()
 
 		NotificationService.createNotification({
 			data: {
+				emailSubject: `${company.name} Accepted Your Application!`,
 				user: {
 					id: jobApplication.worker.toString(),
 					type: 'worker',
 				},
 				type: 'JOB',
-				message: `Your application for ${jobPosting.name} was accepted! Click here to accept or decline this offer.`,
+				message: `Your application for ${jobPosting.name} at ${company.name} was accepted! Click here to accept or decline this offer.`,
 				action: `/applications`,
+				link: "https://werkerbee.com/applications"
 			},
 			sendSMS: true,
 			sendEmail: true,
@@ -226,10 +251,32 @@ export const confirmJob = async (req: Request, res: Response) => {
 
 		await job.save()
 
+		const worker = await WorkerModel.findById(jobApplication.worker)
+		if (!worker) {
+			return res.status(500).json({ message: 'Something went wrong (102)' })
+		}
+
+		NotificationService.createNotification({
+			data: {
+				emailSubject: `${worker.name} Confirmed Their Shift`,
+				user: {
+					id: job.companyId,
+					type: 'company',
+				},
+				type: 'JOB',
+				message: `${worker.name} just confirmed their shift for the job: ${jobPosting.name}`,
+				action: `/jobs/${jobPosting.id}`,
+				link: `https://werkerbee.com/jobs/${jobPosting.id}`
+			},
+			sendSMS: true,
+			sendEmail: true,
+		})
+		
 		res.status(200).json({
 			message: 'Confirmed job application. New job created',
 			job,
 		})
+
 	} catch (error) {
 		res.status(500).json({
 			message: 'An error occurred while updating the job application status.',

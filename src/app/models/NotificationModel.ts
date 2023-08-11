@@ -18,6 +18,10 @@ const NotificationSchema: Schema = new Schema(
 			default: 'MISC',
 			required: true,
 		},
+		emailSubject: {
+			type: String,
+			required: false
+		},
 		message: {
 			type: String,
 			required: true,
@@ -33,6 +37,10 @@ const NotificationSchema: Schema = new Schema(
 		actionData: {
 			type: Schema.Types.Mixed,
 			required: false,
+		},
+		link:{
+			type: String,
+			required: false
 		},
 		dateRead: {
 			type: Date,
