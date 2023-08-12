@@ -13,6 +13,8 @@ import { WorkerRatingModel } from '@/app/models/Rating'
 import { IRating } from '@/app/interfaces/models/Rating'
 import { ICertification } from '@/app/interfaces/models/Certification'
 import CertificationModel from '@/app/models/CertificationModel'
+import { request } from 'http'
+import CompanyModel from '@/app/models/CompanyModel'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -82,6 +84,55 @@ const getWorkerPublicProfile = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)
+	}
+}
+
+const getAllWorkers = async (req: Request, res: Response) => {
+	/*const companyId = req.user?.userId
+	const company = await CompanyModel.findById(companyId);
+
+	if (!company) {
+		return res.status(403).json({message : "Must be logged in as a company to view"})
+	}*/
+
+	const pipeline = [
+		{$match: {
+			accountStatus: "APPROVED"
+		}},
+		{$lookup:{
+			from: "certifications",
+			localField: "certifications",
+			foreignField: "_id",
+			as: "certifications"
+		}},
+		{$lookup:{
+			from: "jobtypes",
+			localField: "jobTypesIds",
+			foreignField: "_id",
+			as: "jobTypes"
+		}},
+		{$project: {
+			username: 1,
+			profilePicture: 1,
+			name: 1,
+			jobTypes: 1,
+			experiences: 1,
+			certifications: 1,
+			"address.city": 1
+		}},
+		{$sort: {
+			name: 1
+		}}
+	]
+
+	try {
+		const workers = await WorkerModel.aggregate(pipeline as any)
+
+		return res.json({
+			workers
+		})
+	} catch (error) {
+		return res.status(500).json({ error: (error as Error).message })
 	}
 }
 
@@ -300,6 +351,7 @@ const WorkerController = {
 	getJobsCalendar,
 	getStatus,
 	addCertification,
+	getAllWorkers
 }
 
 export default WorkerController
