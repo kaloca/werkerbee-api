@@ -13,6 +13,7 @@ import { WorkerRatingModel } from '@/app/models/Rating'
 import { IRating } from '@/app/interfaces/models/Rating'
 import { ICertification } from '@/app/interfaces/models/Certification'
 import CertificationModel from '@/app/models/CertificationModel'
+import CompanyModel from '@/app/models/CompanyModel'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -292,6 +293,59 @@ const addCertification = async (req: Request, res: Response) => {
 	}
 }
 
+const searchWorkers = async (req: Request, res: Response) => {
+	try {
+		const companyId = req.user?.id
+
+		const company = await CompanyModel.findById(companyId)
+
+		if (!company) {
+			return res.status(401).json({ message: 'Not authorized' })
+		}
+
+		const page: number = parseInt(req.query.page as string) || 1
+		const limit: number = parseInt(req.query.limit as string) || 10
+		const searchTerm: string | undefined = req.query.search as string
+
+		const sortOptions: { [key: string]: any } = {
+			name: { name: 1 },
+			recent: { createdAt: -1 },
+			jobs: { jobsCompleted: -1 }, // assuming jobsCompleted is a field in the model
+		}
+
+		// calculate the starting document index
+		const startIndex = (page - 1) * limit
+
+		const searchQuery = {
+			accountStatus: 'APPROVED', // Ensure only "APPROVED" workers are returned
+			...(searchTerm ? { name: new RegExp(searchTerm, 'i') } : {}), // case-insensitive search
+		}
+
+		const sortQuery = sortOptions[req.query.sort as string] || { createdAt: -1 }
+
+		const workers: IWorker[] = await WorkerModel.find(searchQuery)
+			.sort(sortQuery) // sort by createdAt in descending order
+			.skip(startIndex)
+			.limit(limit)
+			.select('+address')
+			.populate('jobTypesIds')
+
+		const total = await WorkerModel.countDocuments(searchQuery)
+
+		res.status(200).json({
+			workers,
+			total,
+			page,
+			limit,
+		})
+	} catch (error) {
+		res.status(500).json({
+			message: 'An error occurred while fetching workers.',
+			error,
+		})
+	}
+}
+
 const WorkerController = {
 	getWorkerProfile,
 	getWorkerPublicProfile,
@@ -300,6 +354,7 @@ const WorkerController = {
 	getJobsCalendar,
 	getStatus,
 	addCertification,
+	searchWorkers,
 }
 
 export default WorkerController

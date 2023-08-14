@@ -34,5 +34,10 @@ WorkerRouter.get(
 	requireAuth,
 	controllers.WorkerController.getStatus
 )
+WorkerRouter.get(
+	'/worker-search',
+	requireAuth,
+	controllers.WorkerController.searchWorkers
+)
 
 export default WorkerRouter
