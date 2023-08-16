@@ -10,6 +10,7 @@ export interface ICompany extends Document {
 	email: string
 	location: {
 		coordinates: [number, number]
+		type: string
 	}
 	type: string
 	overallRating: number

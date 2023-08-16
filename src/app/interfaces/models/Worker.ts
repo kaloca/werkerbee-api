@@ -20,6 +20,7 @@ export interface IWorker extends Document {
 	email: string
 	location: {
 		coordinates: [number, number]
+		type: string
 	}
 	address: Address
 	billingAddress?: Address

@@ -14,6 +14,7 @@ import { IRating } from '@/app/interfaces/models/Rating'
 import { ICertification } from '@/app/interfaces/models/Certification'
 import CertificationModel from '@/app/models/CertificationModel'
 import CompanyModel from '@/app/models/CompanyModel'
+import { ICompany } from '@/app/interfaces/models/Company'
 
 const getWorkerProfile = async (req: Request, res: Response) => {
 	try {
@@ -293,14 +294,21 @@ const addCertification = async (req: Request, res: Response) => {
 	}
 }
 
+type AggregationStage = {
+	[key: string]: any
+}
+
 const searchWorkers = async (req: Request, res: Response) => {
 	try {
-		const companyId = req.user?.id
+		console.log(req.user)
+		const companyId = req.user?.userId
 
-		const company = await CompanyModel.findById(companyId)
+		const company: ICompany | null = await CompanyModel.findById(companyId)
 
-		if (!company) {
-			return res.status(401).json({ message: 'Not authorized' })
+		if (!company || !company.location) {
+			return res
+				.status(401)
+				.json({ message: 'Not authorized or company location missing' })
 		}
 
 		const page: number = parseInt(req.query.page as string) || 1
@@ -313,22 +321,40 @@ const searchWorkers = async (req: Request, res: Response) => {
 			jobs: { jobsCompleted: -1 }, // assuming jobsCompleted is a field in the model
 		}
 
-		// calculate the starting document index
-		const startIndex = (page - 1) * limit
-
 		const searchQuery = {
-			accountStatus: 'APPROVED', // Ensure only "APPROVED" workers are returned
-			...(searchTerm ? { name: new RegExp(searchTerm, 'i') } : {}), // case-insensitive search
+			accountStatus: 'APPROVED',
+			...(searchTerm ? { name: new RegExp(searchTerm, 'i') } : {}),
 		}
 
 		const sortQuery = sortOptions[req.query.sort as string] || { createdAt: -1 }
 
-		const workers: IWorker[] = await WorkerModel.find(searchQuery)
-			.sort(sortQuery) // sort by createdAt in descending order
-			.skip(startIndex)
-			.limit(limit)
-			.select('+address')
-			.populate('jobTypesIds')
+		const aggregationPipeline = [
+			{
+				$geoNear: {
+					near: { type: 'Point', coordinates: company.location.coordinates },
+					distanceField: 'distance',
+					spherical: true,
+					query: searchQuery,
+					maxDistance: 100000000,
+				},
+			},
+			// If sort is not 'location', push the sort criteria into the aggregation pipeline
+			...(req.query.sort !== 'location' ? [{ $sort: sortQuery }] : []),
+			{
+				$lookup: {
+					from: 'jobtypes',
+					localField: 'jobTypesIds',
+					foreignField: '_id',
+					as: 'jobTypesIds',
+				},
+			},
+			{ $skip: (page - 1) * limit },
+			{ $limit: limit },
+		]
+
+		const workers: IWorker[] = await WorkerModel.aggregate(
+			aggregationPipeline as any
+		)
 
 		const total = await WorkerModel.countDocuments(searchQuery)
 
