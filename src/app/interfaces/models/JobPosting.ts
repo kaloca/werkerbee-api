@@ -15,6 +15,8 @@ export interface IJobPosting extends Document {
 	payment: number
 	applications: Schema.Types.ObjectId[]
 	filled?: boolean
+	confirmationTimeLimitExists: boolean
+	confirmationTimeLimitInHours?: number
 	createdAt: Date
 	updatedAt: Date
 }

@@ -32,6 +32,12 @@ const JobPostingSchema = new Schema(
 				select: false,
 			},
 		],
+		confirmationTimeLimitInHours: {
+			type: Number, required: false
+		},
+		confirmationTimeLimitExists: {
+			type: Boolean, default: false
+		}
 	},
 	{
 		timestamps: true,

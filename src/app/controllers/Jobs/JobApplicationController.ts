@@ -126,6 +126,7 @@ export const acceptApplication = async (req: Request, res: Response) => {
 		}
 
 		jobApplication.status = 'ACCEPTED'
+		jobApplication.timeAccepted = new Date()
 		await jobApplication.save()
 
 		NotificationService.createNotification({
@@ -207,6 +208,21 @@ export const confirmJob = async (req: Request, res: Response) => {
 		// Check 2: The job start time is not in the past.
 		if (new Date(jobPosting.start) < new Date()) {
 			return res.status(400).json({ message: 'This job has already expired.' })
+		}
+
+		//Check 3: Job already filled
+		if (jobPosting.filled){
+			return res.status(400).json({ message: 'This job has already been filled.' })
+		}
+
+		//Check 4: Confirmation time limit exceeded
+		if (jobPosting.confirmationTimeLimitExists){
+			var timeAcceptedDate = new Date(jobApplication.timeAccepted!)
+			var timeDue = new Date(new Date(timeAcceptedDate)
+					.setHours(timeAcceptedDate.getHours() + jobPosting.confirmationTimeLimitInHours!))
+			if (timeDue < new Date()){
+				return res.status(400).json({ message: 'Confirmation time limit exceeded.' })
+			}
 		}
 
 		jobApplication.status = 'SCHEDULED'
